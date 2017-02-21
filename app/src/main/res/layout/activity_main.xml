@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,9 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/md_white_1000"
-        android:layout_alignParentBottom="true"
-
+        android:layout_gravity="bottom"
+        android:id="@+id/bottom_nav"
+        app:layout_behavior="@string/bye_burger_bottom_behavior"
         app:itemIconTint="@color/item_bottom_nav_selector"
         app:itemTextColor="@color/item_bottom_nav_selector"
         app:menu="@menu/menu_bottom"></android.support.design.widget.BottomNavigationView>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
