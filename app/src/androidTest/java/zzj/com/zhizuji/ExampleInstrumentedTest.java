@@ -1,4 +1,4 @@
-package zzj.com.zhizuji;
+package com.zzj.zhizuji;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("zzj.com.zhizuji", appContext.getPackageName());
+        assertEquals("com.zzj.zhizuji", appContext.getPackageName());
     }
 }

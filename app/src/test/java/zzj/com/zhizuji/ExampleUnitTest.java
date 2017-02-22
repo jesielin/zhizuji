@@ -1,4 +1,4 @@
-package zzj.com.zhizuji;
+package com.zzj.zhizuji;
 
 import org.junit.Test;
 
