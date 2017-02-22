@@ -9,6 +9,8 @@
     <color name="transparent">#00000000</color>
     <color name="default_clickable_color">#cccccc</color>
     <color name="bg_no_photo">#EEEEEE</color>
+    <color name="more_button_default">#8290AF</color>
+    <color name="more_button_deep">#546e7a</color>
     <!-- google's material design colours from
   http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
 
@@ -306,6 +308,5 @@
     <color name="md_blue_grey_800">#37474f</color>
     <color name="md_blue_grey_900">#263238</color>
     <color name="default_url_text">#8290AF</color>
-    <color name="more_button_default">#8290AF</color>
-    <color name="more_button_deep">#546e7a</color>
+
 </resources>
