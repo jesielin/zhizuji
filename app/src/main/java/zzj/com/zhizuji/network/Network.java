@@ -14,6 +14,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import zzj.com.zhizuji.exception.NetworkException;
+import zzj.com.zhizuji.network.entity.SocialItem;
+import zzj.com.zhizuji.network.entity.SocialTotal;
 
 
 /**
@@ -95,9 +97,9 @@ public class Network {
 //        return compose(httpService.login(loginName,identifyingCode,sign));
 //    }
 //
-//    public Observable<HttpResult<SocialTotal>> getSocialItems(String userUUID, int page, int rows){
-//        return compose(httpService.getSocialItems(userUUID,page,rows,sign));
-//    }
+    public Observable<SocialTotal> getSocialItems(String userUUID, int page, int rows){
+        return compose(httpService.getSocialItems(userUUID, page, rows, sign));
+    }
 
 
 

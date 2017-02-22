@@ -10,6 +10,7 @@ import rx.Observable;
 import zzj.com.zhizuji.network.entity.IndexAdvert;
 import zzj.com.zhizuji.network.entity.Notice;
 import zzj.com.zhizuji.network.entity.SocialItem;
+import zzj.com.zhizuji.network.entity.SocialTotal;
 import zzj.com.zhizuji.network.entity.Tech;
 
 /**
@@ -102,5 +103,5 @@ public interface HttpService {
      * @return
      */
     @GET("/getAllMoment")
-    Observable<HttpResult<SocialItem>> getSocialItems(@Query("userUUID") String userUUID, @Query("page") int page, @Query("rows") int rows, @Query("sign") String sign);
+    Observable<HttpResult<SocialTotal>> getSocialItems(@Query("userUUID") String userUUID, @Query("page") int page, @Query("rows") int rows, @Query("sign") String sign);
 }
