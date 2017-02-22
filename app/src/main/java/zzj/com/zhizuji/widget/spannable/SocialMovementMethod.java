@@ -1,4 +1,4 @@
-package zzj.com.zhizuji.widget.expand;
+package zzj.com.zhizuji.widget.spannable;
 
 import android.text.Layout;
 import android.text.Selection;

@@ -29,6 +29,13 @@ public class SocialItem {
     public String createDate;
     public boolean isExpand;
 
+    public boolean hasComments(){
+        if (comments != null && comments.size() >0)
+            return true;
+        else
+            return false;
+    }
+
     public boolean isExpand(){
         return isExpand;
     }
@@ -50,10 +57,5 @@ public class SocialItem {
                 '}';
     }
 
-    public boolean hasComments(){
-        if (comments != null && comments.size()>0)
-            return true;
-        else return false;
-    }
 
 }

@@ -6,13 +6,13 @@ import android.net.Uri;
 import android.provider.Browser;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.style.ClickableSpan;
 import android.view.View;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import zzj.com.zhizuji.widget.spannable.SpannableClickable;
 
 
 /**

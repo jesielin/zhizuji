@@ -1,4 +1,4 @@
-package zzj.com.zhizuji.util;
+package zzj.com.zhizuji.widget.spannable;
 
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;

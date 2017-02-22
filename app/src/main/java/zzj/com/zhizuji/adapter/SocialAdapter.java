@@ -21,10 +21,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.http.HEAD;
 import zzj.com.zhizuji.R;
+import zzj.com.zhizuji.network.entity.CommentItem;
 import zzj.com.zhizuji.network.entity.SocialItem;
 import zzj.com.zhizuji.util.DebugLog;
 import zzj.com.zhizuji.util.GlideCircleTransform;
 import zzj.com.zhizuji.util.UrlUtils;
+import zzj.com.zhizuji.widget.CommentListView;
 import zzj.com.zhizuji.widget.ExpandTextView;
 
 /**
@@ -95,6 +97,25 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Toast.makeText(mContext,"点了",Toast.LENGTH_SHORT).show();
                 }
             });
+
+            if (item.hasComments()){//处理评论列表
+                vh.listComment.setOnItemClickListener(new CommentListView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int commentPosition) {
+                    }
+                });
+                vh.listComment.setOnItemLongClickListener(new CommentListView.OnItemLongClickListener() {
+                    @Override
+                    public void onItemLongClick(int commentPosition) {
+                        //长按进行复制或者删除
+                    }
+                });
+                vh.listComment.setDatas(item.comments);
+                vh.listComment.setVisibility(View.VISIBLE);
+
+            }else {
+                vh.listComment.setVisibility(View.GONE);
+            }
         }
 
     }
@@ -128,6 +149,8 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ImageView ivAvatar;
         @BindView(R.id.pop)
         ImageButton btnPop;
+        @BindView(R.id.comment_list)
+        CommentListView listComment;
 
         public SocialViewHolder(View itemView) {
             super(itemView);

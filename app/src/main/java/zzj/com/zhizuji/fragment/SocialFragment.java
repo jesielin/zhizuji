@@ -73,7 +73,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     public void onRefresh() {
         DebugLog.e("do on refresh");
 
-        mNetwork.getSocialItems("EE2", 1, 10)
+        mNetwork.getSocialItems("EE2", 1, 20)
                 .subscribe(new Subscriber<SocialTotal>() {
                     @Override
                     public void onCompleted() {

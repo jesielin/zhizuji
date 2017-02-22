@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import zzj.com.zhizuji.R;
-import zzj.com.zhizuji.widget.expand.SocialMovementMethod;
 
 
 /**
@@ -113,7 +112,7 @@ public class ExpandTextView extends LinearLayout {
 
         });
         contentText.setText(content);
-        contentText.setMovementMethod(new SocialMovementMethod(getResources().getColor(R.color.name_selector_color)));
+//        contentText.setMovementMethod(new SocialMovementMethod(getResources().getColor(R.color.name_selector_color)));
     }
 
     public void setExpand(boolean isExpand){
