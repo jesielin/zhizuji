@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscriber;
+
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.adapter.SocialAdapter;
 import com.zzj.zhizuji.base.BaseFragment;
@@ -46,7 +48,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     @BindView(R.id.et)
     EditText etComment;
     @BindView(R.id.send)
-    Button btnSend;
+    ImageButton btnSend;
 
     private SocialAdapter mSocialAdapter;
     private Network mNetwork;
@@ -61,7 +63,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mSocialAdapter = new SocialAdapter( getActivity());
+        mSocialAdapter = new SocialAdapter(getActivity(),mCommentEditBody);
         mRecyclerView.setAdapter(mSocialAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
@@ -73,7 +75,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
                 DebugLog.e("start refre");
             }
         });
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),mLayoutManager
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), mLayoutManager
                 .getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -85,9 +87,9 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Glide.with(getActivity()).resumeRequests();
-                }else{
+                } else {
                     Glide.with(getActivity()).pauseRequests();
                 }
 
@@ -95,6 +97,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         });
         return mContentView;
     }
+
 
 
 
@@ -116,9 +119,9 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
                     @Override
                     public void onNext(SocialTotal socialTotal) {
-                        DebugLog.e("json:"+new Gson().toJson(socialTotal));
+                        DebugLog.e("json:" + new Gson().toJson(socialTotal));
                         if (socialTotal.list != null) {
-                            for (SocialItem item : socialTotal.list){
+                            for (SocialItem item : socialTotal.list) {
                                 item.message = "哈哈哈http://www.baidu.com哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈";
                             }
 
@@ -129,7 +132,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
                 });
     }
 
-    private void showCommentEditBody(){
+    private void showCommentEditBody() {
 
     }
 

@@ -18,8 +18,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.zzj.zhizuji.R;
+import com.zzj.zhizuji.fragment.SocialFragment;
 import com.zzj.zhizuji.network.entity.SocialItem;
+import com.zzj.zhizuji.util.CommonUtils;
 import com.zzj.zhizuji.util.GlideCircleTransform;
+import com.zzj.zhizuji.util.UIHelper;
 import com.zzj.zhizuji.util.UrlUtils;
 import com.zzj.zhizuji.widget.CommentListView;
 import com.zzj.zhizuji.widget.ExpandableTextView;
@@ -33,14 +36,16 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<SocialItem> datas;
     private int HEADER_SIZE = 1;
     private Context mContext;
+    private View mEditView;
 
     public void setDatas(List<SocialItem> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
 
-    public SocialAdapter(Context context) {
+    public SocialAdapter(Context context,View editView) {
         this.mContext = context;
+        this.mEditView = editView;
     }
 
     @Override
@@ -74,27 +79,6 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
 
-//            vh.tvContent.setOnExpandStateChangeListener();
-//            if (position % 2 == 0)
-//                vh.tvContent.setText(UrlUtils.formatUrlString("的的的的的的http://www.baidu.com的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的的"));
-//            if(!TextUtils.isEmpty(item.message)) {
-//                vh.tvContent.setVisibility(View.VISIBLE);
-//                vh.tvContent.setExpand(item.isExpand());
-//                vh.tvContent.setExpandStatusListener(new ExpandTextView.ExpandStatusListener() {
-//                    @Override
-//                    public void statusChange(boolean isExpand) {
-//                        item.setExpand(isExpand);
-//                    }
-//                });
-//
-//
-//                vh.tvContent.setText(UrlUtils.formatUrlString(item.message));
-//                if (position % 2 == 0)
-//                    vh.tvContent.setText(UrlUtils.formatUrlString("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈http://www.baidu.com哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"));
-//
-//            }else {
-//                vh.tvContent.setVisibility(View.GONE);
-//            }
 
             vh.btnPop.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,6 +91,9 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 vh.listComment.setOnItemClickListener(new CommentListView.OnItemClickListener() {
                     @Override
                     public void onItemClick(int commentPosition) {
+                        mEditView.setVisibility(View.VISIBLE);
+                        mEditView.requestFocus();
+                        CommonUtils.showSoftInput(mContext,mEditView);
                     }
                 });
                 vh.listComment.setOnItemLongClickListener(new CommentListView.OnItemLongClickListener() {
