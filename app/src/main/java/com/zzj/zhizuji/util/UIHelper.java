@@ -109,13 +109,13 @@ public class UIHelper {
     /**
      * 显示软键盘
      */
-    public static void showInputMethod(View view,int editId) {
+    public static void showInputMethod(View view) {
         if (view == null) return;
-//        if (view instanceof EditText) view.requestFocus();
-        if (view != null){
-            view.setVisibility(View.VISIBLE);
-            view.findViewById(editId).requestFocus();
-        }
+        if (view instanceof EditText) view.requestFocus();
+//        if (view != null){
+//            view.setVisibility(View.VISIBLE);
+//            view.findViewById(editId).requestFocus();
+//        }
         InputMethodManager imm = (InputMethodManager) view.getContext()
                                                           .getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
@@ -135,7 +135,7 @@ public class UIHelper {
     /**
      * 多少时间后显示软键盘
      */
-    public static void showInputMethod(final View view, long delayMillis, final int editId) {
+    public static void showInputMethod(final View view, long delayMillis) {
         if (view != null)
         // 显示输入法
         {
@@ -143,7 +143,7 @@ public class UIHelper {
 
                 @Override
                 public void run() {
-                    UIHelper.showInputMethod(view,editId);
+                    UIHelper.showInputMethod(view);
                 }
             }, delayMillis);
         }

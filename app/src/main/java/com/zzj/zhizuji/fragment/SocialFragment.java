@@ -1,18 +1,28 @@
 package com.zzj.zhizuji.fragment;
 
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.PopupWindowCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -22,37 +32,39 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Subscriber;
 
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.adapter.SocialAdapter;
 import com.zzj.zhizuji.base.BaseFragment;
 import com.zzj.zhizuji.network.Network;
+import com.zzj.zhizuji.network.entity.CommentItem;
 import com.zzj.zhizuji.network.entity.SocialItem;
 import com.zzj.zhizuji.network.entity.SocialTotal;
 import com.zzj.zhizuji.util.DebugLog;
+import com.zzj.zhizuji.util.KeyboardControlMnanager;
+import com.zzj.zhizuji.util.UIHelper;
+import com.zzj.zhizuji.widget.CommentListView;
 
 /**
  * Created by shawn on 2017-02-22.
  */
 
-public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener {
 
     private View mContentView;
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
     @BindView(R.id.refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.edit_body)
-    View mCommentEditBody;
-    @BindView(R.id.et)
-    EditText etComment;
-    @BindView(R.id.send)
-    ImageButton btnSend;
 
     private SocialAdapter mSocialAdapter;
     private Network mNetwork;
     private LinearLayoutManager mLayoutManager;
+
+    private PopupWindow popupWindow;
+
 
     @Nullable
     @Override
@@ -61,9 +73,22 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         ButterKnife.bind(this, mContentView);
         mNetwork = Network.getInstance();
 
+
+        popupWindow = new PopupWindow(getActivity());
+        popupWindow.setContentView(View.inflate(getActivity(), R.layout.pop_edit_comment, null));
+        popupWindow.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.color.transparent));
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        //设置点击窗口外边窗口消失
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+        //设置输入框不被输入法遮挡
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mSocialAdapter = new SocialAdapter(getActivity(),mCommentEditBody);
+        mSocialAdapter = new SocialAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mSocialAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
@@ -81,6 +106,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
                 super.onScrolled(recyclerView, dx, dy);
             }
 
@@ -95,17 +121,34 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
             }
         });
+        mRecyclerView.setFocusable(true);
+        mRecyclerView.setFocusableInTouchMode(true);
+
+        KeyboardControlMnanager.observerKeyboardVisibleChange(getActivity(), new KeyboardControlMnanager.OnKeyboardStateChangeListener() {
+            @Override
+            public void onKeyboardChange(int displayHeight,int keyboardHeight, boolean isVisible) {
+                if (isVisible) {
+                    mRecyclerView.smoothScrollBy(0,  popLocationY-(displayHeight - popupWindow.getContentView().getHeight() ));
+                    DebugLog.e("displayHeight:"+displayHeight);
+                    DebugLog.e("keyboardHeight:"+keyboardHeight);
+                    DebugLog.e("pop height:"+popupWindow.getContentView().getHeight());
+                    DebugLog.e("item location:"+popLocationY);
+                    DebugLog.e("scroll dis:"+(displayHeight-keyboardHeight-popupWindow.getContentView().getHeight()-popLocationY));
+                }
+
+            }
+        });
+
+
         return mContentView;
     }
-
-
 
 
     @Override
     public void onRefresh() {
         DebugLog.e("do on refresh");
 
-        mNetwork.getSocialItems("EE2", 1, 20)
+        mNetwork.getSocialItems("EE2", 2, 10)
                 .subscribe(new Subscriber<SocialTotal>() {
                     @Override
                     public void onCompleted() {
@@ -132,9 +175,44 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
                 });
     }
 
-    private void showCommentEditBody() {
+
+    private int popLocationY;
+    private int scrollDistance;
+    private ImageButton btnSend;
+    private EditText etComment;
+
+    @Override
+    public void onCommentClick(CommentItem commentItem,int commentPosition, CommentListView listView) {
+        View commentView = listView.getChildAt(commentPosition);
+        int[] commentLocations = new int[2];
+        commentView.getLocationInWindow(commentLocations);
+        popLocationY = commentLocations[1];
+
+        if (btnSend == null){
+            btnSend = (ImageButton) popupWindow.getContentView().findViewById(R.id.send);
+        }
+        if (etComment == null)
+            etComment = (EditText) popupWindow.getContentView().findViewById(R.id.et);
+        etComment.setText("");
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(etComment.getText()))
+                    Toast.makeText(getActivity(), "评论不能为空", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "发送了："+etComment.getText(), Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setFocusable(true);
+        popupWindow.showAtLocation(mContentView, Gravity.BOTTOM, 0, 0);
+        UIHelper.showInputMethod(popupWindow.getContentView().findViewById(R.id.et), 150);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                popupWindow.setFocusable(false);
+            }
+        });
+
 
     }
-
-
 }

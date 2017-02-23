@@ -1,10 +1,13 @@
 package com.zzj.zhizuji.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,8 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.fragment.SocialFragment;
+import com.zzj.zhizuji.network.entity.CommentItem;
 import com.zzj.zhizuji.network.entity.SocialItem;
-import com.zzj.zhizuji.util.CommonUtils;
 import com.zzj.zhizuji.util.GlideCircleTransform;
 import com.zzj.zhizuji.util.UIHelper;
 import com.zzj.zhizuji.util.UrlUtils;
@@ -36,16 +39,17 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<SocialItem> datas;
     private int HEADER_SIZE = 1;
     private Context mContext;
-    private View mEditView;
 
     public void setDatas(List<SocialItem> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
 
-    public SocialAdapter(Context context,View editView) {
+    private CommentClickListener commentClickListener;
+    public SocialAdapter(Context context,CommentClickListener listener) {
         this.mContext = context;
-        this.mEditView = editView;
+        this.commentClickListener = listener;
+
     }
 
     @Override
@@ -57,7 +61,7 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         if (TYPE_HEADER == getItemViewType(position)) {
 
@@ -91,9 +95,12 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 vh.listComment.setOnItemClickListener(new CommentListView.OnItemClickListener() {
                     @Override
                     public void onItemClick(int commentPosition) {
-                        mEditView.setVisibility(View.VISIBLE);
-                        mEditView.requestFocus();
-                        CommonUtils.showSoftInput(mContext,mEditView);
+                        CommentItem commentItem = item.comments.get(commentPosition);
+                        if (item.momentOwner.equals(commentItem.commenterUUID)) {
+                            showDeleteDialog();
+
+                        }else if(commentClickListener != null)
+                            commentClickListener.onCommentClick(commentItem,commentPosition,vh.listComment);
                     }
                 });
                 vh.listComment.setOnItemLongClickListener(new CommentListView.OnItemLongClickListener() {
@@ -110,6 +117,17 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         }
 
+    }
+
+    private void showDeleteDialog(){
+        AlertDialog alertDialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setView(R.layout.dialog_delete);
+        builder.setCancelable(true);
+        alertDialog = builder.create();
+        alertDialog.show();
+
+//        builder.setView()
     }
 
     @Override
@@ -159,4 +177,9 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+
+
+    public interface CommentClickListener{
+        void onCommentClick(CommentItem commentItem,int commentPosition,CommentListView listView);
+    }
 }

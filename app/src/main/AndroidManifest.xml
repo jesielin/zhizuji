@@ -10,7 +10,9 @@
         android:name=".MyApp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="stateUnspecified|adjustPan"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
