@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.fragment.SocialFragment;
 import com.zzj.zhizuji.network.entity.CommentItem;
@@ -45,8 +46,14 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
+    public void addAll(List<SocialItem> datas){
+        this.datas.addAll(datas);
+        notifyDataSetChanged();
+    }
+
     private CommentClickListener commentClickListener;
-    public SocialAdapter(Context context,CommentClickListener listener) {
+
+    public SocialAdapter(Context context, CommentClickListener listener) {
         this.mContext = context;
         this.commentClickListener = listener;
 
@@ -56,6 +63,8 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (TYPE_HEADER == viewType)
             return new SocialHeaderViewHolder(View.inflate(mContext, R.layout.header_social, null));
+        else if (TYPE_MORE == viewType)
+            return new SocialLoadMoreViewHolder(View.inflate(mContext, R.layout.item_load_more, null));
         else
             return new SocialViewHolder(View.inflate(mContext, R.layout.item_social, null));
     }
@@ -65,6 +74,9 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         if (TYPE_HEADER == getItemViewType(position)) {
 
+        } else if (TYPE_MORE == getItemViewType(position)) {
+            if (onLoadMoreListener != null)
+                onLoadMoreListener.onLoadMore();
         } else {
 //            DebugLog.e("posi:"+position);
             final SocialItem item = datas.get(position - HEADER_SIZE);
@@ -75,7 +87,7 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.bg_no_photo).transform(new GlideCircleTransform(mContext))
                     .into(vh.ivAvatar);
 
-            vh.tvContent.setText(UrlUtils.formatUrlString(item.message),item.isExpand());
+            vh.tvContent.setText(UrlUtils.formatUrlString(item.message), item.isExpand());
             vh.tvContent.setOnExpandStateChangeListener(new ExpandableTextView.OnExpandStateChangeListener() {
                 @Override
                 public void onExpandStateChanged(TextView textView, boolean isExpanded) {
@@ -99,8 +111,8 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         if (item.momentOwner.equals(commentItem.commenterUUID)) {
                             showDeleteDialog();
 
-                        }else if(commentClickListener != null)
-                            commentClickListener.onCommentClick(commentItem,commentPosition,vh.listComment);
+                        } else if (commentClickListener != null)
+                            commentClickListener.onCommentClick(commentItem, commentPosition, vh.listComment);
                     }
                 });
                 vh.listComment.setOnItemLongClickListener(new CommentListView.OnItemLongClickListener() {
@@ -116,10 +128,10 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 vh.listComment.setVisibility(View.GONE);
             }
         }
-
     }
 
-    private void showDeleteDialog(){
+
+    private void showDeleteDialog() {
         AlertDialog alertDialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setView(R.layout.dialog_delete);
@@ -132,21 +144,29 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        if (datas != null && datas.size() >= 0)
-            return datas.size() + HEADER_SIZE;
-        else
+        if (datas != null && datas.size() >= 0) {
+            if (mCanLoadMore)
+                return datas.size() + HEADER_SIZE + 1;
+            else
+                return datas.size() + HEADER_SIZE;
+        } else
             return HEADER_SIZE;
     }
 
     private int TYPE_HEADER = 0x0001;
     private int TYPE_SOCIAL = 0x0002;
+    private int TYPE_MORE = 0x0003;
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0)
+        if (position == 0) {
             return TYPE_HEADER;
-        else
+        } else if (position == getItemCount() - 1 && mCanLoadMore) {
+            return TYPE_MORE;
+        } else {
             return TYPE_SOCIAL;
+        }
+
     }
 
     class SocialViewHolder extends RecyclerView.ViewHolder {
@@ -177,9 +197,33 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    class SocialLoadMoreViewHolder extends RecyclerView.ViewHolder {
+
+        public SocialLoadMoreViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
 
 
-    public interface CommentClickListener{
-        void onCommentClick(CommentItem commentItem,int commentPosition,CommentListView listView);
+    public interface CommentClickListener {
+        void onCommentClick(CommentItem commentItem, int commentPosition, CommentListView listView);
+
+    }
+
+    private boolean mCanLoadMore;
+
+    public void setCanLoadMore(boolean canLoadMore) {
+        this.mCanLoadMore = canLoadMore;
+        notifyDataSetChanged();
+    }
+
+    private OnLoadMoreListener onLoadMoreListener;
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
+    public interface OnLoadMoreListener{
+        void onLoadMore();
     }
 }

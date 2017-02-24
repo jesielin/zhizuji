@@ -51,7 +51,7 @@ import com.zzj.zhizuji.widget.CommentListView;
  * Created by shawn on 2017-02-22.
  */
 
-public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener {
+public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener, SocialAdapter.OnLoadMoreListener {
 
     private View mContentView;
     @BindView(R.id.list)
@@ -64,6 +64,8 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     private LinearLayoutManager mLayoutManager;
 
     private PopupWindow popupWindow;
+
+
 
 
     @Nullable
@@ -161,11 +163,28 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     }
 
 
+    //TODO:
+    private int page = 1;
+    private int PAGE_SIZE = 10;
     @Override
     public void onRefresh() {
         DebugLog.e("do on refresh");
 
-        mNetwork.getSocialItems("EE2", 2, 10)
+        request(REQUEST_TYPE_REFRESH);
+
+
+    }
+
+    private static final int REQUEST_TYPE_REFRESH = 0x0011;
+    private static final int REQUEST_TYPE_LOAD_MORE = 0x0012;
+
+    private void request(final int type){
+
+        if (type == REQUEST_TYPE_REFRESH)
+            page = 1;
+
+
+        mNetwork.getSocialItems("EE2", page, PAGE_SIZE)
                 .subscribe(new Subscriber<SocialTotal>() {
                     @Override
                     public void onCompleted() {
@@ -174,22 +193,48 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
                     @Override
                     public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), "网络错误!", Toast.LENGTH_SHORT).show();
+                        if (type == REQUEST_TYPE_REFRESH)
+                            mSwipeRefreshLayout.setRefreshing(false);
 
                     }
 
                     @Override
                     public void onNext(SocialTotal socialTotal) {
                         DebugLog.e("json:" + new Gson().toJson(socialTotal));
-                        if (socialTotal.list != null) {
-                            for (SocialItem item : socialTotal.list) {
-                                item.message = "哈哈哈http://www.baidu.com哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈";
-                            }
+                        DebugLog.e("total:"+socialTotal.total+",page:"+page);
+                        setupLoadMore(socialTotal);
 
-                            mSocialAdapter.setDatas(socialTotal.list);
+                        if (socialTotal.list != null) {
+                            switch (type){
+                                case REQUEST_TYPE_REFRESH:
+                                    mSocialAdapter.setDatas(socialTotal.list);
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    break;
+                                case REQUEST_TYPE_LOAD_MORE:mSocialAdapter.addAll(socialTotal.list);
+
+                                    break;
+                            }
                         }
-                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 });
+    }
+
+    @Override
+    public void onLoadMore() {
+        request(REQUEST_TYPE_LOAD_MORE);
+    }
+
+    private void setupLoadMore(SocialTotal socialTotal){
+        if (socialTotal.total == page){
+            mSocialAdapter.setCanLoadMore(false);
+            mSocialAdapter.setOnLoadMoreListener(null);
+        }else {
+            mSocialAdapter.setCanLoadMore(true);
+            mSocialAdapter.setOnLoadMoreListener(this);
+        }
+        page++;
+
     }
 
 
@@ -232,4 +277,6 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
 
     }
+
+
 }

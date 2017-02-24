@@ -8,7 +8,6 @@
     <!--TODO:滑动不顺畅-->
     <item android:id="@+id/social"
         android:icon="@drawable/ic_social_24dp"
-
         android:title="知脊圈" />
     <item android:id="@+id/news"
         android:icon="@drawable/ic_news_24dp"
