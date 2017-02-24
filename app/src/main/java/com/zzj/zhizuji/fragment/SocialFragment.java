@@ -74,6 +74,22 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         mNetwork = Network.getInstance();
 
 
+
+
+
+
+
+        return mContentView;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initView();
+    }
+
+    private void initPopupEdit(){
         popupWindow = new PopupWindow(getActivity());
         popupWindow.setContentView(View.inflate(getActivity(), R.layout.pop_edit_comment, null));
         popupWindow.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
@@ -85,6 +101,10 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
         //设置输入框不被输入法遮挡
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    private void initView(){
+        initPopupEdit();
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -138,9 +158,6 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
             }
         });
-
-
-        return mContentView;
     }
 
 
@@ -178,7 +195,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
     private int popLocationY;
     private int scrollDistance;
-    private ImageButton btnSend;
+    private Button btnSend;
     private EditText etComment;
 
     @Override
@@ -189,7 +206,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         popLocationY = commentLocations[1];
 
         if (btnSend == null){
-            btnSend = (ImageButton) popupWindow.getContentView().findViewById(R.id.send);
+            btnSend = (Button) popupWindow.getContentView().findViewById(R.id.send);
         }
         if (etComment == null)
             etComment = (EditText) popupWindow.getContentView().findViewById(R.id.et);

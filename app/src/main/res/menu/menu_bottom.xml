@@ -3,18 +3,20 @@
 
 
     <item android:id="@+id/home"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_home_24dp"
         android:title="首页" />
+    <!--TODO:滑动不顺畅-->
     <item android:id="@+id/social"
-        android:icon="@drawable/ic_supervisor_account_black_24dp"
+        android:icon="@drawable/ic_social_24dp"
+
         android:title="知脊圈" />
     <item android:id="@+id/news"
-        android:icon="@drawable/ic_fiber_new_black_24dp"
+        android:icon="@drawable/ic_news_24dp"
         android:title="资讯" />
     <item android:id="@+id/message"
-        android:icon="@drawable/ic_comment_black_24dp"
+        android:icon="@drawable/ic_message_24dp"
         android:title="消息" />
     <item android:id="@+id/me"
-        android:icon="@drawable/ic_account_box_black_24dp"
+        android:icon="@drawable/ic_me_24dp"
         android:title="我" />
 </menu>
