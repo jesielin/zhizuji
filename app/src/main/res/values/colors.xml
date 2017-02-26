@@ -14,6 +14,9 @@
     <color name="praise_item_default">#333333</color>
     <color name="praise_item_selector_default">#cccccc</color>
     <color name="praise_item">#8290AF</color>
+    <!--点赞popup色值-->
+    <color name="comment_popup_bg">#4c5154</color>
+    <color name="comment_popup_tx_bg">#c7c7c7</color>
     <!-- google's material design colours from
   http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
 

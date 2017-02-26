@@ -1,15 +1,22 @@
 package com.zzj.zhizuji.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +28,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.jaeger.ninegridimageview.NineGridImageView;
+import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.fragment.SocialFragment;
 import com.zzj.zhizuji.network.entity.CommentItem;
 import com.zzj.zhizuji.network.entity.SocialItem;
+import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.GlideCircleTransform;
 import com.zzj.zhizuji.util.UIHelper;
 import com.zzj.zhizuji.util.UrlUtils;
@@ -40,6 +50,10 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<SocialItem> datas;
     private int HEADER_SIZE = 1;
     private Context mContext;
+    private PopupWindow comPop;
+    private View commentView;
+    private View btnFavor;
+    private View btnComment;
 
     public void setDatas(List<SocialItem> datas) {
         this.datas = datas;
@@ -53,10 +67,23 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private CommentClickListener commentClickListener;
 
-    public SocialAdapter(Context context, CommentClickListener listener) {
+    private View.OnClickListener onClickListener;
+    public SocialAdapter(Context context, CommentClickListener listener, View.OnClickListener aa) {
         this.mContext = context;
         this.commentClickListener = listener;
+        this.onClickListener = aa;
+        initPop();
 
+    }
+
+
+    private int windowWidth;
+
+    private void initPop(){
+        commentView = View.inflate(mContext,R.layout.popup_comment,null);
+        btnFavor = commentView.findViewById(R.id.item_like);
+        btnComment = commentView.findViewById(R.id.item_comment);
+        windowWidth = ((Activity)mContext).getWindow().getDecorView().getWidth();
     }
 
     @Override
@@ -96,12 +123,33 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
 
 
+            vh.imv.setImagesData(item.photos);
+
             vh.btnPop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "点了", Toast.LENGTH_SHORT).show();
+                    comPop = new PopupWindow(commentView,RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,true);
+                    comPop.setBackgroundDrawable(new BitmapDrawable());
+                    comPop.getContentView().findViewById(R.id.item_like).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(mContext, "zan", Toast.LENGTH_SHORT).show();
+                            comPop.dismiss();
+                        }
+                    });
+                    comPop.getContentView().findViewById(R.id.item_comment).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(mContext, "comment", Toast.LENGTH_SHORT).show();
+                            comPop.dismiss();
+                        }
+                    });
+
+                    comPop.showAsDropDown(v, -UIHelper.dipToPx(140),-(UIHelper.dipToPx(35)+v.getMeasuredHeight())/2);
+//                    pp.showAsDropDown(v,0,0);
                 }
             });
+//            vh.btnPop.setOnClickListener(onClickListener);
 
             if (item.hasComments()) {//处理评论列表
                 vh.listComment.setOnItemClickListener(new CommentListView.OnItemClickListener() {
@@ -184,11 +232,38 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @BindView(R.id.expand_text_view)
         ExpandableTextView tvContent;
 
+        @BindView(R.id.imv)
+        NineGridImageView<String> imv;
+
         public SocialViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            imv.setAdapter(mAdapter);
+
         }
+
+        private NineGridImageViewAdapter<String> mAdapter = new NineGridImageViewAdapter<String>() {
+            @Override
+            protected void onDisplayImage(Context context, ImageView imageView, String s) {
+                Glide.with(mContext).load(s)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.bg_no_photo)
+                        .into(imageView);
+            }
+
+            @Override
+            protected ImageView generateImageView(Context context) {
+                return super.generateImageView(context);
+            }
+
+            @Override
+            protected void onItemImageClick(Context context, int index, List<String> list) {
+                super.onItemImageClick(context, index, list);
+                Toast.makeText(mContext, "posi:"+index+",url:"+list.get(index), Toast.LENGTH_SHORT).show();
+            }
+        };
     }
+
+
 
     class SocialHeaderViewHolder extends RecyclerView.ViewHolder {
 

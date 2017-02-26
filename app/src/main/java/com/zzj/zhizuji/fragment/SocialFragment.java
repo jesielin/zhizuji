@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,7 +53,7 @@ import com.zzj.zhizuji.widget.CommentListView;
  * Created by shawn on 2017-02-22.
  */
 
-public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener, SocialAdapter.OnLoadMoreListener {
+public class SocialFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener, SocialAdapter.OnLoadMoreListener {
 
     private View mContentView;
     @BindView(R.id.list)
@@ -89,6 +91,8 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     public void onStart() {
         super.onStart();
         initView();
+
+
     }
 
     private void initPopupEdit(){
@@ -110,7 +114,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mSocialAdapter = new SocialAdapter(getActivity(), this);
+        mSocialAdapter = new SocialAdapter(getActivity(), this,this);
         mRecyclerView.setAdapter(mSocialAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
@@ -160,6 +164,8 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
             }
         });
+
+
     }
 
 
@@ -177,6 +183,15 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
     private static final int REQUEST_TYPE_REFRESH = 0x0011;
     private static final int REQUEST_TYPE_LOAD_MORE = 0x0012;
+
+    //TODO:
+    private String[] IMG_URL_LIST = {
+            "http://ac-QYgvX1CC.clouddn.com/36f0523ee1888a57.jpg", "http://ac-QYgvX1CC.clouddn.com/07915a0154ac4a64.jpg",
+            "http://ac-QYgvX1CC.clouddn.com/9ec4bc44bfaf07ed.jpg", "http://ac-QYgvX1CC.clouddn.com/fa85037f97e8191f.jpg",
+            "http://ac-QYgvX1CC.clouddn.com/de13315600ba1cff.jpg", "http://ac-QYgvX1CC.clouddn.com/15c5c50e941ba6b0.jpg",
+            "http://ac-QYgvX1CC.clouddn.com/10762c593798466a.jpg", "http://ac-QYgvX1CC.clouddn.com/eaf1c9d55c5f9afd.jpg",
+            "http://ac-QYgvX1CC.clouddn.com/ad99de83e1e3f7d4.jpg", "http://ac-QYgvX1CC.clouddn.com/233a5f70512befcc.jpg",
+    };
 
     private void request(final int type){
 
@@ -205,7 +220,11 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
                         DebugLog.e("total:"+socialTotal.total+",page:"+page);
                         setupLoadMore(socialTotal);
 
+
                         if (socialTotal.list != null) {
+                            for (int i = 0 ; i < socialTotal.list.size() ; i ++){
+                                socialTotal.list.get(i).photos = Arrays.asList(IMG_URL_LIST).subList(0, i % 9);
+                            }
                             switch (type){
                                 case REQUEST_TYPE_REFRESH:
                                     mSocialAdapter.setDatas(socialTotal.list);
@@ -279,4 +298,9 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     }
 
 
+    @Override
+    public void onClick(View v) {
+        PopupWindow pp = new PopupWindow(View.inflate(getActivity(),R.layout.popup_comment,null), RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,true);
+        pp.showAsDropDown(v,0,0);
+    }
 }

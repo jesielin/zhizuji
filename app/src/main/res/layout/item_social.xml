@@ -56,6 +56,14 @@
                     android:layout_gravity="left|bottom"
                      />
             </com.zzj.zhizuji.widget.ExpandableTextView>
+            <com.jaeger.ninegridimageview.NineGridImageView
+                android:layout_height="wrap_content"
+
+                android:layout_width="match_parent"
+                app:imgGap="4dp"
+                android:id="@+id/imv"
+                app:showStyle="grid"
+                app:singleImgSize="250dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
