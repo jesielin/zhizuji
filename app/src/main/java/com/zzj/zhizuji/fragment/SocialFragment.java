@@ -1,5 +1,6 @@
 package com.zzj.zhizuji.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
 
+import com.zzj.zhizuji.PostSocialActivity;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.adapter.SocialAdapter;
 import com.zzj.zhizuji.base.BaseFragment;
@@ -60,6 +62,8 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
     RecyclerView mRecyclerView;
     @BindView(R.id.refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.post)
+    View btnPost;
 
     private SocialAdapter mSocialAdapter;
     private Network mNetwork;
@@ -109,8 +113,16 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
+    @OnClick(R.id.post)
+    public void post(){
+        Intent intent = new Intent(getActivity(), PostSocialActivity.class);
+        startActivity(intent);
+    }
+
     private void initView(){
         initPopupEdit();
+
+
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);

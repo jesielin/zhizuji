@@ -40,7 +40,14 @@ dependencies {
 
 //    compile 'com.ms-square:expandableTextView:0.1.4'
 
+    compile 'com.library.tangxiaolv:telegramgallery:1.0.3'
+
     compile 'com.jaeger.ninegridimageview:library:1.0.2'
 
     compile 'me.relex:circleindicator:1.2.2@aar'
+
+    compile 'me.iwf.photopicker:PhotoPicker:0.9.5@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
+
+    compile 'com.github.LuckSiege.PictureSelector:picture_library:v1.2.5'
 }
