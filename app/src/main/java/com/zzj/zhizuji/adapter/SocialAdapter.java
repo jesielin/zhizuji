@@ -3,6 +3,7 @@ package com.zzj.zhizuji.adapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +34,7 @@ import butterknife.ButterKnife;
 
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
+import com.zzj.zhizuji.PhotoReviewActivity;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.fragment.SocialFragment;
 import com.zzj.zhizuji.network.entity.CommentItem;
@@ -258,6 +263,11 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             @Override
             protected void onItemImageClick(Context context, int index, List<String> list) {
                 super.onItemImageClick(context, index, list);
+                Intent intent = new Intent(mContext,PhotoReviewActivity.class);
+                intent.putExtra("position",index);
+                intent.putExtra("list", list.toArray(new String[0]));
+                mContext.startActivity(intent);
+
                 Toast.makeText(mContext, "posi:"+index+",url:"+list.get(index), Toast.LENGTH_SHORT).show();
             }
         };
