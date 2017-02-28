@@ -3,7 +3,11 @@ package com.zzj.zhizuji.network;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
@@ -88,9 +92,11 @@ public interface HttpService {
      *  sex 性别  1男 0女
      * @return
      */
-    @GET("/setUserinfo")
+    @Multipart
+    @POST("/setUserinfo")
     Observable<HttpResult<Object>> setUserinfo(
-            @QueryMap Map<String, String> options
+            @QueryMap Map<String, String> options,@Part("headSculpture") String description,
+            @Part("file\"; filename=\"image.png\"") RequestBody imgs
     );
 
 
@@ -104,4 +110,15 @@ public interface HttpService {
      */
     @GET("/getAllMoment")
     Observable<HttpResult<SocialTotal>> getSocialItems(@Query("userUUID") String userUUID, @Query("page") int page, @Query("rows") int rows, @Query("sign") String sign);
+
+    /**
+     * 发表朋友圈
+     * @param owner
+     * @param message
+     * @param sign
+     * @return
+     */
+    @POST("/sendMoment")
+    Observable<HttpResult<Object>> sendMoment(@Query("owner")String owner,@Query("message")String message,@Query("sign")String sign);
+
 }

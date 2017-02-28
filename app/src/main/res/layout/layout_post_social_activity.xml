@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         android:text="选择"
         />
+    <Button
+        android:id="@+id/user"
+        android:onClick="up"
+        android:text="上传图片测试"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <com.jaeger.ninegridimageview.NineGridImageView
         android:layout_height="wrap_content"

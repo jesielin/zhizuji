@@ -24,12 +24,12 @@
         <activity android:name=".PhotoReviewActivity"/>
 
         <activity android:name=".PostSocialActivity"/>
-        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
-
-            />
-
-        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
-            />
+        <!--<activity android:name="me.iwf.photopicker.PhotoPickerActivity"-->
+<!---->
+            <!--/>-->
+<!---->
+        <!--<activity android:name="me.iwf.photopicker.PhotoPagerActivity"-->
+            <!--/>-->
     </application>
 
 </manifest>

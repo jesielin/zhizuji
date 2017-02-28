@@ -1,5 +1,6 @@
 package com.zzj.zhizuji;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,16 +15,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
-import com.tangxiaolv.telegramgallery.GalleryActivity;
-import com.tangxiaolv.telegramgallery.GalleryConfig;
+import com.zzj.zhizuji.network.Network;
 import com.zzj.zhizuji.util.DebugLog;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.iwf.photopicker.PhotoPicker;
+import droidninja.filepicker.FilePickerBuilder;
+import droidninja.filepicker.FilePickerConst;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import rx.Subscriber;
 
 /**
  * Created by shawn on 17/2/27.
@@ -34,6 +41,9 @@ public class PostSocialActivity extends AppCompatActivity {
     Button btnChoose;
     @BindView(R.id.imv)
     NineGridImageView<String> imv;
+
+    private ArrayList<String> photoPaths = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,22 +53,45 @@ public class PostSocialActivity extends AppCompatActivity {
         btnChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PhotoPicker.builder()
-                        .setPhotoCount(9)
-                        .setShowCamera(false)
-                        .setShowGif(false)
-                        .setPreviewEnabled(true)
-                        .start(PostSocialActivity.this, PhotoPicker.REQUEST_CODE);
+
+                FilePickerBuilder.getInstance().setMaxCount(9)
+                        .setSelectedFiles(photoPaths)
+                        .pickPhoto(PostSocialActivity.this);
             }
         });
 
         imv.setAdapter(mAdapter);
 
 
-
-
-
     }
+
+    String fileName;
+    public void up(View view){
+        Network network = Network.getInstance();
+        Map<String,String> map = new HashMap<>();
+        map.put("uuid","1");
+        File file1 = new File(fileName);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"),file1);
+        network.setUserInfo(map,fileName,requestBody)
+        .subscribe(new Subscriber<Object>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                DebugLog.e("message:"+e.getMessage());
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+        });
+    }
+
+
 
     private NineGridImageViewAdapter<String> mAdapter = new NineGridImageViewAdapter<String>() {
         @Override
@@ -76,21 +109,28 @@ public class PostSocialActivity extends AppCompatActivity {
         @Override
         protected void onItemImageClick(Context context, int index, List<String> list) {
             super.onItemImageClick(context, index, list);
-
-            Toast.makeText(PostSocialActivity.this, "posi:"+index+",url:"+list.get(index), Toast.LENGTH_SHORT).show();
+            fileName = list.get(index);
+            Toast.makeText(PostSocialActivity.this, "posi:" + index + ",url:" + list.get(index), Toast.LENGTH_SHORT).show();
         }
     };
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == PhotoPicker.REQUEST_CODE) {
-            if (data != null) {
-                ArrayList<String> photos =
-                        data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                imv.setImagesData(photos);
-            }
+        switch (requestCode)
+        {
+            case FilePickerConst.REQUEST_CODE_PHOTO:
+                if(resultCode== Activity.RESULT_OK && data!=null)
+                {
+                    imv.setImagesData(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_PHOTOS));
+
+                }
+                break;
+
+
         }
     }
+
 
 }

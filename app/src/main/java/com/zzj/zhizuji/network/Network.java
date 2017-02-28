@@ -1,9 +1,11 @@
 package com.zzj.zhizuji.network;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.Result;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -99,6 +101,15 @@ public class Network {
 //
     public Observable<SocialTotal> getSocialItems(String userUUID, int page, int rows){
         return compose(httpService.getSocialItems(userUUID, page, rows, sign));
+    }
+
+    public Observable<Object> postSocial(String owner,String message){
+        return compose(httpService.sendMoment(owner,message,sign));
+    }
+
+    public Observable<Object> setUserInfo(Map<String,String> infos, String fileName, RequestBody avator){
+
+        return compose(httpService.setUserinfo(infos,fileName,avator));
     }
 
 
