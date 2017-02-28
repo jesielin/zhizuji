@@ -20,15 +20,14 @@ import com.zzj.zhizuji.util.DebugLog;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import rx.Subscriber;
 
@@ -66,31 +65,41 @@ public class PostSocialActivity extends AppCompatActivity {
     }
 
     String fileName;
-    public void up(View view){
+
+    public void up(View view) {
         Network network = Network.getInstance();
-        Map<String,String> map = new HashMap<>();
-        map.put("uuid","1");
-        File file1 = new File(fileName);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"),file1);
-        network.setUserInfo(map,fileName,requestBody)
-        .subscribe(new Subscriber<Object>() {
-            @Override
-            public void onCompleted() {
+        File file = new File(fileName);
+        // 创建 RequestBody，用于封装构建RequestBody
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-            }
+        // MultipartBody.Part  和后端约定好Key，这里的partName是用image
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("headSculpture", file.getName(), requestFile);
 
-            @Override
-            public void onError(Throwable e) {
-                DebugLog.e("message:"+e.getMessage());
-            }
+        // 添加描述
+        String descriptionString = "11";
+        RequestBody description =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), descriptionString);
+        network.setUserInfo(description, body)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onNext(Object o) {
+                    }
 
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        DebugLog.e("message:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+
+                    }
+                });
     }
-
 
 
     private NineGridImageViewAdapter<String> mAdapter = new NineGridImageViewAdapter<String>() {
@@ -118,11 +127,9 @@ public class PostSocialActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case FilePickerConst.REQUEST_CODE_PHOTO:
-                if(resultCode== Activity.RESULT_OK && data!=null)
-                {
+                if (resultCode == Activity.RESULT_OK && data != null) {
                     imv.setImagesData(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_PHOTOS));
 
                 }

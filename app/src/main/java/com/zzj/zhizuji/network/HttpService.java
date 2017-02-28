@@ -3,6 +3,7 @@ package com.zzj.zhizuji.network;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -95,8 +96,9 @@ public interface HttpService {
     @Multipart
     @POST("/setUserinfo")
     Observable<HttpResult<Object>> setUserinfo(
-            @QueryMap Map<String, String> options,@Part("headSculpture") String description,
-            @Part("file\"; filename=\"image.png\"") RequestBody imgs
+            @Part("uuid")RequestBody uuid,
+            @Part MultipartBody.Part imgs,
+            @Part("sign")RequestBody sign
     );
 
 

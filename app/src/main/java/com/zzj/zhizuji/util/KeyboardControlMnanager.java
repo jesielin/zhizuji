@@ -42,7 +42,7 @@ public class KeyboardControlMnanager {
 
                 int displayHeight = rect.height();
                 int windowHeight = decorView.getHeight();
-                DebugLog.e("window height:"+windowHeight);
+//                DebugLog.e("window height:"+windowHeight);
                 int keyboardHeight = windowHeight - displayHeight;
                 if (preKeyboardHeight != keyboardHeight) {
                     //判定可见区域与原来的window区域占比是否小于0.75,小于意味着键盘弹出来了。

@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.Result;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -35,8 +38,11 @@ public class Network {
 
     //构造方法私有
     private Network() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         //手动创建一个OkHttpClient并设置超时时间
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+        httpClientBuilder.addInterceptor(logging);
         httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 
         retrofit = new Retrofit.Builder()
@@ -107,9 +113,12 @@ public class Network {
         return compose(httpService.sendMoment(owner,message,sign));
     }
 
-    public Observable<Object> setUserInfo(Map<String,String> infos, String fileName, RequestBody avator){
+    public Observable<Object> setUserInfo(RequestBody uuid, MultipartBody.Part avator){
 
-        return compose(httpService.setUserinfo(infos,fileName,avator));
+        RequestBody description =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), sign);
+        return compose(httpService.setUserinfo(uuid,avator,description));
     }
 
 
