@@ -24,12 +24,16 @@
         <activity android:name=".PhotoReviewActivity"/>
 
         <activity android:name=".PostSocialActivity"/>
-        <!--<activity android:name="me.iwf.photopicker.PhotoPickerActivity"-->
-<!---->
-            <!--/>-->
-<!---->
-        <!--<activity android:name="me.iwf.photopicker.PhotoPagerActivity"-->
-            <!--/>-->
+
+        <activity
+            android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
+            android:screenOrientation="portrait"
+            android:exported="true"
+            />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

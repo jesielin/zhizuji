@@ -20,13 +20,15 @@ import com.zzj.zhizuji.base.BaseFragment;
 
 public class MeFragment extends BaseFragment {
 
-    private View mContentView;
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = View.inflate(getActivity(), R.layout.fragment_me,null);
-        ButterKnife.bind(this,mContentView);
-        return mContentView;
+    protected int getLayoutId() {
+        return R.layout.fragment_me;
+    }
+
+    @Override
+    protected String getTitle() {
+        return "我";
     }
 
 }

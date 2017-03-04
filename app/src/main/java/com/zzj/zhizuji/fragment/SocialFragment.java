@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.PopupWindowCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.finalteam.rxgalleryfinal.bean.MediaBean;
 import rx.Subscriber;
 
 import com.zzj.zhizuji.PostSocialActivity;
@@ -57,13 +59,11 @@ import com.zzj.zhizuji.widget.CommentListView;
 
 public class SocialFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener, SocialAdapter.OnLoadMoreListener {
 
-    private View mContentView;
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
     @BindView(R.id.refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.post)
-    View btnPost;
+
 
     private SocialAdapter mSocialAdapter;
     private Network mNetwork;
@@ -77,27 +77,24 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = View.inflate(getActivity(), R.layout.fragment_social, null);
-        ButterKnife.bind(this, mContentView);
+        super.onCreateView(inflater,container,savedInstanceState);
         mNetwork = Network.getInstance();
-
-
-
-
-
-
-
+        initView();
         return mContentView;
-    }
 
+    }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        initView();
-
-
+    protected int getLayoutId() {
+        return R.layout.fragment_social;
     }
+
+    @Override
+    protected String getTitle() {
+        return "知脊圈";
+    }
+
+
 
     private void initPopupEdit(){
         popupWindow = new PopupWindow(getActivity());
@@ -116,7 +113,7 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
     @OnClick(R.id.post)
     public void post(){
         Intent intent = new Intent(getActivity(), PostSocialActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
 
     private void initView(){
@@ -180,6 +177,17 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String message = data.getStringExtra("MESSAGE");
+        ArrayList<MediaBean> photos = data.getParcelableArrayListExtra("PHOTOS");
+        DebugLog.e("message:"+message);
+        for (MediaBean bean : photos){
+            DebugLog.e("result:"+bean.toString());
+
+        }
+    }
 
     //TODO:
     private int page = 1;

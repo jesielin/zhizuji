@@ -123,4 +123,20 @@ public interface HttpService {
     @POST("/sendMoment")
     Observable<HttpResult<Object>> sendMoment(@Query("owner")String owner,@Query("message")String message,@Query("sign")String sign);
 
+
+    /**
+     * 发表评论
+     * @param momentsID 朋友圈id
+     * @param ownerUUID 朋友圈发布者id
+     * @param commenterUUID  评论者id
+     * @param friendUUID @评论人id  可为空
+     * @param message 评论内容
+     * @param sign
+     * @return
+     */
+    @GET("sendComment")
+    Observable<HttpResult<Object>> sendComment(@Query("momentsID")String momentsID,@Query("ownerUUID")String ownerUUID,@Query("commenterUUID")String commenterUUID,@Query("friendUUID")
+                                               String friendUUID,@Query("message")String message,@Query("sign") String sign);
+
+
 }

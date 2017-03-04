@@ -1,5 +1,6 @@
 package com.zzj.zhizuji.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -8,9 +9,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zzj.zhizuji.MyApp;
+import com.zzj.zhizuji.R;
 
 
 /**
@@ -183,5 +186,10 @@ public class UIHelper {
         } catch (Exception e) {
             return Color.TRANSPARENT;
         }
+    }
+
+
+    public static void setToolbar(Activity activity,String title){
+        ((TextView)activity.findViewById(R.id.title)).setText(title);
     }
 }
