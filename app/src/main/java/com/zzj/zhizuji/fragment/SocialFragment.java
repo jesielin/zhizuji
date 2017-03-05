@@ -57,7 +57,7 @@ import com.zzj.zhizuji.widget.CommentListView;
  * Created by shawn on 2017-02-22.
  */
 
-public class SocialFragment extends BaseFragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener, SocialAdapter.OnLoadMoreListener {
+public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, SocialAdapter.CommentClickListener, SocialAdapter.OnLoadMoreListener, SocialAdapter.SendCommentClickListener {
 
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
@@ -161,14 +161,14 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
 
         KeyboardControlMnanager.observerKeyboardVisibleChange(getActivity(), new KeyboardControlMnanager.OnKeyboardStateChangeListener() {
             @Override
-            public void onKeyboardChange(int displayHeight,int keyboardHeight, boolean isVisible) {
+            public void onKeyboardChange(int displayHeight,int statusbarHeight, boolean isVisible) {
                 if (isVisible) {
-                    mRecyclerView.smoothScrollBy(0,  popLocationY-(displayHeight - popupWindow.getContentView().getHeight() ));
+                    mRecyclerView.smoothScrollBy(0,  popLocationY-(displayHeight - popupWindow.getContentView().getHeight())-statusbarHeight);
                     DebugLog.e("displayHeight:"+displayHeight);
-                    DebugLog.e("keyboardHeight:"+keyboardHeight);
+                    DebugLog.e("status bar height:"+statusbarHeight);
                     DebugLog.e("pop height:"+popupWindow.getContentView().getHeight());
                     DebugLog.e("item location:"+popLocationY);
-                    DebugLog.e("scroll dis:"+(displayHeight-keyboardHeight-popupWindow.getContentView().getHeight()-popLocationY));
+                    DebugLog.e("scroll dis:"+(popLocationY-(displayHeight - popupWindow.getContentView().getHeight() )));
                 }
 
             }
@@ -286,12 +286,18 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
     private EditText etComment;
 
     @Override
-    public void onCommentClick(CommentItem commentItem,int commentPosition, CommentListView listView) {
+    public void onCommentClick(SocialItem item,CommentItem commentItem,int commentPosition, CommentListView listView) {
         View commentView = listView.getChildAt(commentPosition);
         int[] commentLocations = new int[2];
         commentView.getLocationInWindow(commentLocations);
         popLocationY = commentLocations[1];
+        showKeyboard();
 
+
+    }
+
+
+    public void showKeyboard(){
         if (btnSend == null){
             btnSend = (Button) popupWindow.getContentView().findViewById(R.id.send);
         }
@@ -316,14 +322,18 @@ public class SocialFragment extends BaseFragment implements View.OnClickListener
                 popupWindow.setFocusable(false);
             }
         });
-
-
     }
 
-
     @Override
-    public void onClick(View v) {
-        PopupWindow pp = new PopupWindow(View.inflate(getActivity(),R.layout.popup_comment,null), RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT,true);
-        pp.showAsDropDown(v,0,0);
+    public void onSendCommentClick(SocialItem item,int locaY) {
+//        View child = mRecyclerView.getChildAt(childPosition);
+//
+//        int[] commentLocations = new int[2];
+//        DebugLog.e("child:"+child);
+//        if (child != null)
+//            child.getLocationInWindow(commentLocations);
+        popLocationY = locaY;
+        showKeyboard();
+
     }
 }

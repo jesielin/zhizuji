@@ -42,13 +42,13 @@ public class KeyboardControlMnanager {
 
                 int displayHeight = rect.height();
                 int windowHeight = decorView.getHeight();
-//                DebugLog.e("window height:"+windowHeight);
+                DebugLog.e("window height:"+windowHeight);
                 int keyboardHeight = windowHeight - displayHeight;
                 if (preKeyboardHeight != keyboardHeight) {
                     //判定可见区域与原来的window区域占比是否小于0.75,小于意味着键盘弹出来了。
                     boolean isVisible = (displayHeight * 1.0f / windowHeight * 1.0f) < 0.75f;
                     if (isVisible != preVisible) {
-                        onKeyboardStateChangeListener.onKeyboardChange(displayHeight,keyboardHeight, isVisible);
+                        onKeyboardStateChangeListener.onKeyboardChange(displayHeight,rect.top, isVisible);
                         preVisible = isVisible;
                     }
                 }
@@ -74,6 +74,6 @@ public class KeyboardControlMnanager {
 
     //=============================================================interface
     public interface OnKeyboardStateChangeListener {
-        void onKeyboardChange(int displayHeight,int keyboardHeight, boolean isVisible);
+        void onKeyboardChange(int displayHeight,int statusbarHeight, boolean isVisible);
     }
 }

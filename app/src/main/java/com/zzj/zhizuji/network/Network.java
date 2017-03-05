@@ -56,12 +56,12 @@ public class Network {
     }
 
     //在访问HttpMethods时创建单例
-    private static class SingletonHolder{
+    private static class SingletonHolder {
         private static final Network INSTANCE = new Network();
     }
 
     //获取单例
-    public static Network getInstance(){
+    public static Network getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -80,12 +80,12 @@ public class Network {
                     if (tHttpResult != null) {
                         if ("error".equals(tHttpResult.result))
                             subscriber.onError(new NetworkException(tHttpResult.msg));
-                        else if (tHttpResult.data == null){
+                        else if (tHttpResult.data == null) {
                             subscriber.onError(new NetworkException("子数据为空"));
-                        }else {
+                        } else {
                             subscriber.onNext(tHttpResult.data);
                         }
-                    }else {
+                    } else {
                         subscriber.onError(new NetworkException("总数据为空"));
                     }
                     subscriber.onCompleted();
@@ -97,7 +97,7 @@ public class Network {
 
     private static String sign = "123";
 
-//    public Observable<HttpResult<List<IndexAdvert>>> getIndexAdvert(int position){
+    //    public Observable<HttpResult<List<IndexAdvert>>> getIndexAdvert(int position){
 //        return compose(httpService.getIndexAdvert(position, sign));
 //    }
 //
@@ -105,13 +105,19 @@ public class Network {
 //        return compose(httpService.login(loginName,identifyingCode,sign));
 //    }
 //
-    public Observable<SocialTotal> getSocialItems(String userUUID, int page, int rows){
+    public Observable<SocialTotal> getSocialItems(String userUUID, int page, int rows) {
         return compose(httpService.getSocialItems(userUUID, page, rows, sign));
     }
 
-    public Observable<Object> postSocial(String owner,String message){
-        return compose(httpService.sendMoment(owner,message,sign));
+    public Observable<Object> postSocial(String owner, String message) {
+        return compose(httpService.sendMoment(owner, message, sign));
     }
+
+    public Observable<Object> sendComment(String momentsID, String ownerUUID, String commenterUUID, String friendUUID, String message) {
+        return compose(httpService.sendComment(momentsID,ownerUUID,commenterUUID,friendUUID,message,sign));
+    }
+
+
 
     public Observable<Object> setUserInfo(RequestBody uuid, MultipartBody.Part avator){
 

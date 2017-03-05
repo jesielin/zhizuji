@@ -57,8 +57,6 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private Context mContext;
     private PopupWindow comPop;
     private View commentView;
-    private View btnFavor;
-    private View btnComment;
 
     public void setDatas(List<SocialItem> datas) {
         this.datas = datas;
@@ -71,24 +69,18 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private CommentClickListener commentClickListener;
+    private SendCommentClickListener sendCommentClickListener;
 
-    private View.OnClickListener onClickListener;
-    public SocialAdapter(Context context, CommentClickListener listener, View.OnClickListener aa) {
+    public SocialAdapter(Context context, CommentClickListener listener,SendCommentClickListener sendCommentClickListener) {
         this.mContext = context;
         this.commentClickListener = listener;
-        this.onClickListener = aa;
+        this.sendCommentClickListener = sendCommentClickListener;
         initPop();
 
     }
 
-
-    private int windowWidth;
-
     private void initPop(){
         commentView = View.inflate(mContext,R.layout.popup_comment,null);
-        btnFavor = commentView.findViewById(R.id.item_like);
-        btnComment = commentView.findViewById(R.id.item_comment);
-        windowWidth = ((Activity)mContext).getWindow().getDecorView().getWidth();
     }
 
     @Override
@@ -129,6 +121,7 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
             vh.imv.setImagesData(item.photos);
+            final int[] locas = new int[2];
 
             vh.btnPop.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -146,6 +139,11 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(mContext, "comment", Toast.LENGTH_SHORT).show();
+                            if (sendCommentClickListener != null){
+                                vh.itemView.getLocationInWindow(locas);
+                                DebugLog.e("in adapter location:"+locas[1]);
+                                sendCommentClickListener.onSendCommentClick(item,locas[1]+vh.itemView.getMeasuredHeight());
+                            }
                             comPop.dismiss();
                         }
                     });
@@ -165,7 +163,7 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             showDeleteDialog();
 
                         } else if (commentClickListener != null)
-                            commentClickListener.onCommentClick(commentItem, commentPosition, vh.listComment);
+                            commentClickListener.onCommentClick(item,commentItem, commentPosition, vh.listComment);
                     }
                 });
                 vh.listComment.setOnItemLongClickListener(new CommentListView.OnItemLongClickListener() {
@@ -291,8 +289,12 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     public interface CommentClickListener {
-        void onCommentClick(CommentItem commentItem, int commentPosition, CommentListView listView);
+        void onCommentClick(SocialItem item,CommentItem commentItem, int commentPosition, CommentListView listView);
 
+    }
+
+    public interface SendCommentClickListener{
+        void onSendCommentClick(SocialItem item,int locaY);
     }
 
     private boolean mCanLoadMore;
