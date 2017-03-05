@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -291,13 +292,13 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         int[] commentLocations = new int[2];
         commentView.getLocationInWindow(commentLocations);
         popLocationY = commentLocations[1];
-        showKeyboard();
+        showKeyboard(item,commentPosition,listView);
 
 
     }
 
 
-    public void showKeyboard(){
+    public void showKeyboard(final SocialItem item, final int commentPosition, final CommentListView listView){
         if (btnSend == null){
             btnSend = (Button) popupWindow.getContentView().findViewById(R.id.send);
         }
@@ -309,7 +310,10 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
             public void onClick(View v) {
                 if (TextUtils.isEmpty(etComment.getText()))
                     Toast.makeText(getActivity(), "评论不能为空", Toast.LENGTH_SHORT).show();
+                else
+                    sendComment(item,commentPosition,etComment.getText().toString(),listView);
                 Toast.makeText(getActivity(), "发送了："+etComment.getText(), Toast.LENGTH_SHORT).show();
+
                 popupWindow.dismiss();
             }
         });
@@ -325,7 +329,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     }
 
     @Override
-    public void onSendCommentClick(SocialItem item,int locaY) {
+    public void onSendCommentClick(SocialItem item,int locaY,CommentListView listView) {
 //        View child = mRecyclerView.getChildAt(childPosition);
 //
 //        int[] commentLocations = new int[2];
@@ -333,7 +337,37 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 //        if (child != null)
 //            child.getLocationInWindow(commentLocations);
         popLocationY = locaY;
-        showKeyboard();
+        showKeyboard(item,-1,listView);
 
     }
+
+    public void sendComment(final SocialItem item, int commentPosition, String message, final CommentListView listView){
+        if (commentPosition == -1){
+            //评论朋友圈
+
+
+        }else {
+            //评论其他人
+            String friendID = item.comments.get(commentPosition).commenterUUID;
+            mNetwork.sendComment(item.momentsID,item.momentOwner,"123",friendID,message)
+            .subscribe(new Subscriber<Object>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    DebugLog.e("error message:"+e.getMessage());
+                }
+
+                @Override
+                public void onNext(Object o) {
+                    DebugLog.e("send comment result:"+new Gson().toJson(o));
+
+                }
+            });
+        }
+    }
+
 }

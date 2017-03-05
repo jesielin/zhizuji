@@ -142,7 +142,7 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             if (sendCommentClickListener != null){
                                 vh.itemView.getLocationInWindow(locas);
                                 DebugLog.e("in adapter location:"+locas[1]);
-                                sendCommentClickListener.onSendCommentClick(item,locas[1]+vh.itemView.getMeasuredHeight());
+                                sendCommentClickListener.onSendCommentClick(item,locas[1]+vh.itemView.getMeasuredHeight(),vh.listComment);
                             }
                             comPop.dismiss();
                         }
@@ -294,7 +294,7 @@ public class SocialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public interface SendCommentClickListener{
-        void onSendCommentClick(SocialItem item,int locaY);
+        void onSendCommentClick(SocialItem item,int locaY,CommentListView listView);
     }
 
     private boolean mCanLoadMore;
