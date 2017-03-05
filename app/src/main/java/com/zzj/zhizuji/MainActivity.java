@@ -1,5 +1,6 @@
 package com.zzj.zhizuji;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.zzj.zhizuji.fragment.MeFragment;
 import com.zzj.zhizuji.fragment.MessageFragment;
 import com.zzj.zhizuji.fragment.NewsFragment;
 import com.zzj.zhizuji.fragment.SocialFragment;
+import com.zzj.zhizuji.util.SharedPreferenceUtils;
 import com.zzj.zhizuji.util.ViewUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.social:
                         clazz = SocialFragment.class;
+
                         break;
                     case R.id.news:
                         clazz = NewsFragment.class;
@@ -71,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
                         clazz = MeFragment.class;
                         break;
                 }
+
+                if (item.getItemId() == R.id.social || item.getItemId() == R.id.message || item.getItemId() == R.id.me){
+                    if (!SharedPreferenceUtils.isLogin()){
+                        startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                        return false;
+                    }
+
+                }
+
                 switchFragment(clazz);
                 return true;
             }

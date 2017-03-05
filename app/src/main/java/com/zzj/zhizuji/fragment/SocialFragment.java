@@ -1,6 +1,8 @@
 package com.zzj.zhizuji.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import butterknife.OnClick;
 import cn.finalteam.rxgalleryfinal.bean.MediaBean;
 import rx.Subscriber;
 
+import com.zzj.zhizuji.LoginActivity;
 import com.zzj.zhizuji.PostSocialActivity;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.adapter.SocialAdapter;
@@ -51,6 +54,7 @@ import com.zzj.zhizuji.network.entity.SocialItem;
 import com.zzj.zhizuji.network.entity.SocialTotal;
 import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.KeyboardControlMnanager;
+import com.zzj.zhizuji.util.SharedPreferenceUtils;
 import com.zzj.zhizuji.util.UIHelper;
 import com.zzj.zhizuji.widget.CommentListView;
 
@@ -74,14 +78,14 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        mNetwork = Network.getInstance();
-        initView();
-        return mContentView;
+
+            mNetwork = Network.getInstance();
+            initView();
+            return mContentView;
 
     }
 
@@ -223,7 +227,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
             page = 1;
 
 
-        mNetwork.getSocialItems("EE2", page, PAGE_SIZE)
+        mNetwork.getSocialItems("FF1", page, PAGE_SIZE)
                 .subscribe(new Subscriber<SocialTotal>() {
                     @Override
                     public void onCompleted() {

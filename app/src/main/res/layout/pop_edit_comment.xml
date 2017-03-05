@@ -27,6 +27,6 @@
         android:layout_marginLeft="4dp"
         android:contentDescription="@null"
         android:text="发送"
-        android:background="@drawable/btn_send_bg"
+        android:background="@drawable/btn_common_bg"
          />
 </LinearLayout>

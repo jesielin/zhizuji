@@ -24,6 +24,8 @@
         <activity android:name=".PhotoReviewActivity"/>
 
         <activity android:name=".PostSocialActivity"/>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".RegisterActivity"/>
 
         <activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
@@ -34,6 +36,8 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             />
+
+
     </application>
 
 </manifest>
