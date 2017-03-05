@@ -349,7 +349,7 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
         }else {
             //评论其他人
             String friendID = item.comments.get(commentPosition).commenterUUID;
-            mNetwork.sendComment(item.momentsID,item.momentOwner,"123",friendID,message)
+            mNetwork.sendComment(item.momentsID,item.momentOwner,"FF3",friendID,message)
             .subscribe(new Subscriber<Object>() {
                 @Override
                 public void onCompleted() {
