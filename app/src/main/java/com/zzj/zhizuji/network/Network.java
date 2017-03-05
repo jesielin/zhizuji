@@ -105,6 +105,11 @@ public class Network {
 //        return compose(httpService.login(loginName,identifyingCode,sign));
 //    }
 //
+
+    public Observable<Object> register(String loginName,String verifyCode,String type){
+        return compose(httpService.register(loginName,verifyCode,type,sign));
+    }
+
     public Observable<SocialTotal> getSocialItems(String userUUID, int page, int rows) {
         return compose(httpService.getSocialItems(userUUID, page, rows, sign));
     }
