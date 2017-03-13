@@ -139,4 +139,13 @@ public interface HttpService {
                                                String friendUUID,@Query("message")String message,@Query("sign") String sign);
 
 
+    /**
+     * 获取短信验证码
+     * @param mobile 手机号
+     * @param sign
+     * @return
+     */
+    @GET("sendSms")
+    Observable<HttpResult<Object>> sendSms(@Query("mobile")String mobile,@Query("sign")String sign);
+
 }

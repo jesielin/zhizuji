@@ -132,6 +132,10 @@ public class Network {
         return compose(httpService.setUserinfo(uuid,avator,description));
     }
 
+    public Observable<Object> sendSms(String mobile){
+        return compose(httpService.sendSms(mobile,sign));
+    }
+
 
 
     private  <T> Observable<T> compose(Observable<HttpResult<T>> o){
@@ -142,5 +146,7 @@ public class Network {
                 .observeOn(AndroidSchedulers.mainThread())
                 ;
     }
+
+
 
 }
