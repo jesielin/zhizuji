@@ -29,7 +29,7 @@ import com.zzj.zhizuji.network.entity.SocialTotal;
 
 public class Network {
 
-    public static final String BASE_URL = "http://101.201.155.115:6068";
+    public static final String BASE_URL = "http://101.201.155.115:8086";
 
     private static final int DEFAULT_TIMEOUT = 5;
 

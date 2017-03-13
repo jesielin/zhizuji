@@ -109,7 +109,7 @@ public class RegisterFirstFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable e) {
-
+                DebugLog.e("error:"+e.getMessage());
             }
 
             @Override
@@ -129,7 +129,7 @@ public class RegisterFirstFragment extends BaseFragment {
             super.handleMessage(msg);
             switch (msg.what){
                 case PERIOD:
-                    DebugLog.e("msg:"+msg);
+//                    DebugLog.e("msg:"+msg);
                     int time = (int) msg.obj;
                     time--;
                     getVerify.setText(time+"秒");
