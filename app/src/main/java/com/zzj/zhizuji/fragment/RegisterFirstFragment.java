@@ -37,6 +37,8 @@ public class RegisterFirstFragment extends BaseFragment {
         return "注册";
     }
 
+    @BindView(R.id.next)
+    Button btnNext;
     @OnClick(R.id.next)
     public void next(View view){
 
@@ -49,24 +51,40 @@ public class RegisterFirstFragment extends BaseFragment {
             return;
         }
 
-//        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,ViewUtils.createFragment(RegisterSecondFragment.class)).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack("second").commit();
+
+
+        btnNext.setEnabled(false);
         Network.getInstance().register(etTel.getText().toString(),etVerify.getText().toString(),String.valueOf(type))
                 .subscribe(new Subscriber<Object>() {
                     @Override
                     public void onCompleted() {
                         DebugLog.e("complete");
+                        btnNext.setEnabled(true);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         DebugLog.e("error:"+e.getMessage());
+
                     }
 
                     @Override
                     public void onNext(Object o) {
                         DebugLog.e("json:"+new Gson().toJson(o));
+                        //跳转设置信息
+                        getActivity().getSupportFragmentManager().beginTransaction().
+                                replace(R.id.container,ViewUtils.createFragment(RegisterSecondFragment.class)).
+                                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack("second").commit();
                     }
                 });
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeMessages(PERIOD);
+
     }
 
     int type = 0;

@@ -96,9 +96,11 @@ public interface HttpService {
     @Multipart
     @POST("/setUserinfo")
     Observable<HttpResult<Object>> setUserinfo(
-            @Part("uuid")RequestBody uuid,
+            @Part("nickName")RequestBody nickName,
+            @Part("sex")RequestBody sex,
             @Part MultipartBody.Part imgs,
             @Part("sign")RequestBody sign
+
     );
 
 

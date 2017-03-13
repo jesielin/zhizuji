@@ -54,7 +54,6 @@ public class PostSocialActivity extends AppCompatActivity {
     @BindView(R.id.et)
     EditText etMessage;
 
-    private ArrayList<String> photoPaths = new ArrayList<>();
     private ArrayList<MediaBean> photos = new ArrayList<>();
 
     @Override
@@ -112,40 +111,7 @@ public class PostSocialActivity extends AppCompatActivity {
 
 
 
-    public void up(View view) {
-        Network network = Network.getInstance();
-        File file = new File(fileName);
-        // 创建 RequestBody，用于封装构建RequestBody
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-        // MultipartBody.Part  和后端约定好Key，这里的partName是用image
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("headSculpture", file.getName(), requestFile);
-
-        // 添加描述
-        String descriptionString = "11";
-        RequestBody description =
-                RequestBody.create(
-                        MediaType.parse("multipart/form-data"), descriptionString);
-        network.setUserInfo(description, body)
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        DebugLog.e("message:" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-
-                    }
-                });
-    }
 
 
     private NineGridImageViewAdapter<MediaBean> mediaAdapter = new NineGridImageViewAdapter<MediaBean>() {
