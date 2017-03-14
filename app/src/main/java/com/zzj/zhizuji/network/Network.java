@@ -21,6 +21,8 @@ import rx.schedulers.Schedulers;
 
 import com.google.gson.Gson;
 import com.zzj.zhizuji.exception.NetworkException;
+import com.zzj.zhizuji.network.entity.RegisterResult;
+import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.network.entity.SocialItem;
 import com.zzj.zhizuji.network.entity.SocialTotal;
 import com.zzj.zhizuji.util.DebugLog;
@@ -110,6 +112,7 @@ public class Network {
                         DebugLog.e("error2");
                         subscriber.onError(new NetworkException("总数据为空"));
                     }
+                    DebugLog.e("complete");
                     subscriber.onCompleted();
                 }
             });
@@ -128,7 +131,7 @@ public class Network {
 //    }
 //
 
-    public Observable<Object> register(String loginName,String verifyCode,String type){
+    public Observable<RegisterResult> register(String loginName, String verifyCode, String type){
         return compose(normalHttpService.register(loginName,verifyCode,type,sign));
     }
 
@@ -147,12 +150,12 @@ public class Network {
 
 
 
-    public Observable<Object> setUserInfo(RequestBody nickName, RequestBody sex,MultipartBody.Part avator){
+    public Observable<SetInfoResult> setUserInfo(RequestBody uuid, RequestBody nickName, RequestBody sex, MultipartBody.Part avator){
 
         RequestBody description =
                 RequestBody.create(
                         MediaType.parse("multipart/form-data"), sign);
-        return compose(normalHttpService.setUserinfo(nickName,sex,avator,description));
+        return compose(normalHttpService.setUserinfo(uuid,nickName,sex,avator,description));
     }
 
     public Observable<Object> sendSms(String mobile){

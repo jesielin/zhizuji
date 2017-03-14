@@ -86,7 +86,8 @@
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:hint="手机号"
-                android:lines="1"
+                android:singleLine="true"
+                android:maxLength="11"
                 android:id="@+id/tel"
                 android:inputType="number"
                 android:textColorHint="@color/colorPrimary"
@@ -104,11 +105,12 @@
             android:layout_width="match_parent"
             android:hint="验证码"
 
-            android:maxEms="6"
+            android:maxLength="6"
             android:id="@+id/verify"
             android:background="@null"
+
             android:drawableBottom="@drawable/edittext_baseline"
-            android:inputType="textPassword"
+            android:inputType="number"
             android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
         <Button

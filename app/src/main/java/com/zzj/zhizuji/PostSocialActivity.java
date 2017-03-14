@@ -92,7 +92,7 @@ public class PostSocialActivity extends AppCompatActivity {
 
 
 
-        UIHelper.setToolbar(this, "发表知脊圈");
+        UIHelper.setTitle( "发表知脊圈",this);
 
     }
 

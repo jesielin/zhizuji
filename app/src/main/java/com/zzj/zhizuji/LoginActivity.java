@@ -7,6 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.zzj.zhizuji.util.SharedPreferenceUtils;
+import com.zzj.zhizuji.util.UIHelper;
+import com.zzj.zhizuji.util.ViewUtils;
+
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
@@ -17,11 +21,22 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        UIHelper.setTitle("登录",this);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SharedPreferenceUtils.isLogin())
+            finish();
     }
 
     @OnClick({R.id.single,R.id.operator})

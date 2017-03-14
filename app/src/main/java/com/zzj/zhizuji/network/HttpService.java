@@ -14,6 +14,8 @@ import retrofit2.http.QueryMap;
 import rx.Observable;
 import com.zzj.zhizuji.network.entity.IndexAdvert;
 import com.zzj.zhizuji.network.entity.Notice;
+import com.zzj.zhizuji.network.entity.RegisterResult;
+import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.network.entity.SocialItem;
 import com.zzj.zhizuji.network.entity.SocialTotal;
 import com.zzj.zhizuji.network.entity.Tech;
@@ -52,7 +54,7 @@ public interface HttpService {
      * @return
      */
     @GET("/register")
-    Observable<HttpResult<Object>> register(@Query("loginName") String loginName, @Query("identifyingCode") String identifyingCode, @Query("regType") String regType, @Query("sign") String sign);
+    Observable<HttpResult<RegisterResult>> register(@Query("loginName") String loginName, @Query("identifyingCode") String identifyingCode, @Query("regType") String regType, @Query("sign") String sign);
 
     /**
      * 首页动态
@@ -95,7 +97,8 @@ public interface HttpService {
      */
     @Multipart
     @POST("/setUserinfo")
-    Observable<HttpResult<Object>> setUserinfo(
+    Observable<HttpResult<SetInfoResult>> setUserinfo(
+            @Part("uuid")RequestBody uuid,
             @Part("nickName")RequestBody nickName,
             @Part("sex")RequestBody sex,
             @Part MultipartBody.Part imgs,

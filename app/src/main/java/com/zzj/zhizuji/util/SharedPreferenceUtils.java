@@ -21,10 +21,19 @@ public class SharedPreferenceUtils {
     }
 
     public static boolean isLogin(){
-        if (TextUtils.isEmpty(instance.getString("LOGIN_NAME","")))
+        if (TextUtils.isEmpty(instance.getString("UUID","")))
             return false;
         else
             return true;
-
     }
+
+    public static void setLogin(String uuid,String loginName){
+        instance.edit().putString("UUID",uuid).putString("LOGIN_NAME",loginName).apply();
+    }
+
+    public static String getValue(String key){
+        return instance.getString(key,"");
+    }
+
+
 }

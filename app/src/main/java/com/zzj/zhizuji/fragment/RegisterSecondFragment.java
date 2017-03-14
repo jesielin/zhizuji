@@ -18,8 +18,10 @@ import com.zzj.zhizuji.PostSocialActivity;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.base.BaseFragment;
 import com.zzj.zhizuji.network.Network;
+import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.GlideCircleTransform;
+import com.zzj.zhizuji.util.SharedPreferenceUtils;
 
 import java.io.File;
 
@@ -91,6 +93,11 @@ public class RegisterSecondFragment extends BaseFragment {
                     MultipartBody.Part.createFormData("headSculpture", file.getName(), requestFile);
 
         }
+        //添加UUID
+        String uuidText = SharedPreferenceUtils.getValue("UUID");
+        RequestBody uuid =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), uuidText);
         // 添加nickname
         String nickNameText = etName.getText().toString();
         RequestBody nickName =
@@ -101,8 +108,8 @@ public class RegisterSecondFragment extends BaseFragment {
         RequestBody sex =
                 RequestBody.create(
                         MediaType.parse("multipart/form-data"), sexText);
-        network.setUserInfo(nickName, sex,avatorPart)
-                .subscribe(new Subscriber<Object>() {
+        network.setUserInfo(uuid,nickName, sex,avatorPart)
+                .subscribe(new Subscriber<SetInfoResult>() {
                     @Override
                     public void onCompleted() {
                         progressDialog.cancel();
@@ -115,10 +122,28 @@ public class RegisterSecondFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onNext(Object o) {
-
+                    public void onNext(SetInfoResult setInfoResult) {
+                        progressDialog.setMessage("注册成功");
+                        getActivity().finish();
                     }
                 });
+//                .subscribe(new Subscriber<Object>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        progressDialog.cancel();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        DebugLog.e("message:" + e.getMessage());
+//                        progressDialog.cancel();
+//                    }
+//
+//                    @Override
+//                    public void onNext(Object o) {
+//
+//                    }
+//                });
 
 
     }

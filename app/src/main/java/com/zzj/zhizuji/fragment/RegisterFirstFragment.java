@@ -15,7 +15,10 @@ import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.RegisterActivity;
 import com.zzj.zhizuji.base.BaseFragment;
 import com.zzj.zhizuji.network.Network;
+import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.util.DebugLog;
+import com.zzj.zhizuji.util.SharedPreferenceUtils;
+import com.zzj.zhizuji.util.UIHelper;
 import com.zzj.zhizuji.util.ViewUtils;
 
 import butterknife.BindView;
@@ -55,23 +58,34 @@ public class RegisterFirstFragment extends BaseFragment {
 
         btnNext.setEnabled(false);
         Network.getInstance().register(etTel.getText().toString(),etVerify.getText().toString(),String.valueOf(type))
-                .subscribe(new Subscriber<Object>() {
+                .subscribe(new Subscriber<RegisterResult>() {
                     @Override
                     public void onCompleted() {
                         DebugLog.e("complete");
                         btnNext.setEnabled(true);
+                        handler.removeMessages(PERIOD);
+                        handler.sendMessage(handler.obtainMessage(FINISH));
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        DebugLog.e("error:"+e.getMessage());
-
+                        UIHelper.ToastMessage(e.getMessage());
+//                        btnNext.setEnabled(true);
+//                        handler.removeMessages(PERIOD);
+                        btnNext.setEnabled(true);
+                        handler.removeMessages(PERIOD);
+                        handler.sendMessage(handler.obtainMessage(FINISH));
                     }
 
                     @Override
-                    public void onNext(Object o) {
-                        DebugLog.e("json:"+new Gson().toJson(o));
-                        //跳转设置信息
+                    public void onNext(RegisterResult registerResult) {
+                        DebugLog.e("json:"+new Gson().toJson(registerResult));
+//
+                        if (registerResult != null)
+                            SharedPreferenceUtils.setLogin(registerResult.uuid,registerResult.loginName);
+//
+                        UIHelper.hideInputMethod(btnNext);
+//                        //跳转设置信息
                         getActivity().getSupportFragmentManager().beginTransaction().
                                 replace(R.id.container,ViewUtils.createFragment(RegisterSecondFragment.class)).
                                 setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack("second").commit();
@@ -158,6 +172,10 @@ public class RegisterFirstFragment extends BaseFragment {
                         getVerify.setEnabled(true);
                     }
                 break;
+                case FINISH:
+                    getVerify.setText("获取验证码");
+                    getVerify.setEnabled(true);
+                    break;
             }}
     };
 

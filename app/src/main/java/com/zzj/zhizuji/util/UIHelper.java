@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -25,6 +26,19 @@ public class UIHelper {
 
     // =============================================================tools
     // methods
+
+
+    public static void setTitle(String title, final AppCompatActivity activity){
+        ((TextView)activity.findViewById(R.id.title)).setText(title);
+        View viewById = activity.findViewById(R.id.back);
+        if (viewById != null)
+            viewById.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    activity.onBackPressed();
+                }
+            });
+    }
 
     /**
      * dip转px
@@ -189,7 +203,5 @@ public class UIHelper {
     }
 
 
-    public static void setToolbar(Activity activity,String title){
-        ((TextView)activity.findViewById(R.id.title)).setText(title);
-    }
+
 }

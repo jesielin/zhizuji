@@ -25,7 +25,8 @@
 
         <activity android:name=".PostSocialActivity"/>
         <activity android:name=".LoginActivity"/>
-        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".RegisterActivity"
+            android:windowSoftInputMode="stateUnspecified"/>
 
         <activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
