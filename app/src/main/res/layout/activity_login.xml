@@ -49,36 +49,7 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <RadioGroup
-        android:layout_width="320dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/single"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/left_login_bg"
-            android:button="@null"
-            android:checked="true"
-            android:gravity="center"
-            android:text="个人"
-            android:textColor="@color/text_color_login" />
-
-        <RadioButton
-            android:id="@+id/operator"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/right_login_bg"
-            android:button="@null"
-            android:gravity="center"
-            android:text="技师"
-            android:textColor="@color/text_color_login" />
-    </RadioGroup>
 
 
     <LinearLayout
@@ -87,31 +58,51 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:orientation="vertical">
-
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:hint="手机号"
+                android:singleLine="true"
+                android:maxLength="11"
                 android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="用户名" />
+                android:inputType="number"
+                android:textColorHint="@color/colorPrimary"
+                android:layout_height="wrap_content" />
         </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:hint="验证码"
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/pwd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="密码"
-                android:inputType="textPassword"
-                 />
-        </android.support.design.widget.TextInputLayout>
+                    android:maxLength="6"
+                    android:id="@+id/verify"
+                    android:background="@null"
+
+                    android:drawableBottom="@drawable/edittext_baseline"
+                    android:inputType="number"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:id="@+id/getverify"
+                android:text="获取验证码"
+                android:inputType="number"
+                android:maxEms="6"
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/btn_common_bg"
+                android:layout_width="120dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
     </LinearLayout>
 
 

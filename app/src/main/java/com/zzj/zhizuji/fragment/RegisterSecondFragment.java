@@ -123,6 +123,8 @@ public class RegisterSecondFragment extends BaseFragment {
 
                     @Override
                     public void onNext(SetInfoResult setInfoResult) {
+                        SharedPreferenceUtils.setStringValue("AVATOR",setInfoResult.headSculpture);
+                        SharedPreferenceUtils.setStringValue("NICKNAME",setInfoResult.nickName);
                         progressDialog.setMessage("注册成功");
                         getActivity().finish();
                     }

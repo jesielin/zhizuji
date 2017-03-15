@@ -5,6 +5,9 @@
     <color name="colorAccent">#FF4081</color>
 
 
+    <color name="layout_bg">#EFEFEF</color>
+    <color name="divider">#E0E0E0</color>
+
     <color name="name_selector_color">#cccccc</color>
     <color name="transparent">#00000000</color>
     <color name="default_clickable_color">#cccccc</color>

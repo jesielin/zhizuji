@@ -35,5 +35,9 @@ public class SharedPreferenceUtils {
         return instance.getString(key,"");
     }
 
+    public static void setStringValue(String key,String value){
+        instance.edit().putString(key,value).apply();
+    }
+
 
 }

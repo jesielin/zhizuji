@@ -20,6 +20,7 @@ import com.zzj.zhizuji.fragment.MeFragment;
 import com.zzj.zhizuji.fragment.MessageFragment;
 import com.zzj.zhizuji.fragment.NewsFragment;
 import com.zzj.zhizuji.fragment.SocialFragment;
+import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.SharedPreferenceUtils;
 import com.zzj.zhizuji.util.ViewUtils;
 
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mFragmentManager = getSupportFragmentManager();
+
+        DebugLog.e("share:"+SharedPreferenceUtils.getValue("NICKNAME"));
 
 
         mCurrentFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.container);

@@ -45,14 +45,14 @@ public class RegisterFirstFragment extends BaseFragment {
     @OnClick(R.id.next)
     public void next(View view){
 
-        if(etTel.getText().toString().length() != 11){
-            Toast.makeText(getActivity(), "请输入正确的手机号", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (etVerify.getText().toString().length() != 6){
-            Toast.makeText(getActivity(), "请输入正确的验证码", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            if(etTel.getText().toString().length() != 11){
+                Toast.makeText(getActivity(), "请输入正确的手机号", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (etVerify.getText().toString().length() != 6){
+                Toast.makeText(getActivity(), "请输入正确的验证码", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
 
 
