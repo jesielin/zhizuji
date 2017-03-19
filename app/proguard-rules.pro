@@ -22,5 +22,8 @@
   public *;
 }
 
+-keep class com.hyphenate.** {*;}
+-dontwarn  com.hyphenate.**
+
 # for DexGuard only
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule

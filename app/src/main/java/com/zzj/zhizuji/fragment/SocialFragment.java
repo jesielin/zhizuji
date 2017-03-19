@@ -185,12 +185,14 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String message = data.getStringExtra("MESSAGE");
-        ArrayList<MediaBean> photos = data.getParcelableArrayListExtra("PHOTOS");
-        DebugLog.e("message:"+message);
-        for (MediaBean bean : photos){
-            DebugLog.e("result:"+bean.toString());
+        if (data != null) {
+            String message = data.getStringExtra("MESSAGE");
+            ArrayList<MediaBean> photos = data.getParcelableArrayListExtra("PHOTOS");
+            DebugLog.e("message:" + message);
+            for (MediaBean bean : photos) {
+                DebugLog.e("result:" + bean.toString());
 
+            }
         }
     }
 
@@ -209,17 +211,17 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     private static final int REQUEST_TYPE_REFRESH = 0x0011;
     private static final int REQUEST_TYPE_LOAD_MORE = 0x0012;
 
-    //TODO:
-    private String[] IMG_URL_LIST = {
-            "http://img3.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=214&gp=0.jpg",
-            "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-480302.jpg",
-            "http://ac-QYgvX1CC.clouddn.com/36f0523ee1888a57.jpg", "http://ac-QYgvX1CC.clouddn.com/07915a0154ac4a64.jpg",
-            "http://ac-QYgvX1CC.clouddn.com/9ec4bc44bfaf07ed.jpg", "http://ac-QYgvX1CC.clouddn.com/fa85037f97e8191f.jpg",
-            "http://ac-QYgvX1CC.clouddn.com/de13315600ba1cff.jpg", "http://ac-QYgvX1CC.clouddn.com/15c5c50e941ba6b0.jpg",
-            "http://ac-QYgvX1CC.clouddn.com/10762c593798466a.jpg", "http://ac-QYgvX1CC.clouddn.com/eaf1c9d55c5f9afd.jpg"
-
-
-    };
+//    //TODO:
+//    private String[] IMG_URL_LIST = {
+//            "http://img3.imgtn.bdimg.com/it/u=1794894692,1423685501&fm=214&gp=0.jpg",
+//            "https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-480302.jpg",
+//            "http://ac-QYgvX1CC.clouddn.com/36f0523ee1888a57.jpg", "http://ac-QYgvX1CC.clouddn.com/07915a0154ac4a64.jpg",
+//            "http://ac-QYgvX1CC.clouddn.com/9ec4bc44bfaf07ed.jpg", "http://ac-QYgvX1CC.clouddn.com/fa85037f97e8191f.jpg",
+//            "http://ac-QYgvX1CC.clouddn.com/de13315600ba1cff.jpg", "http://ac-QYgvX1CC.clouddn.com/15c5c50e941ba6b0.jpg",
+//            "http://ac-QYgvX1CC.clouddn.com/10762c593798466a.jpg", "http://ac-QYgvX1CC.clouddn.com/eaf1c9d55c5f9afd.jpg"
+//
+//
+//    };
 
     private void request(final int type){
 
@@ -250,9 +252,9 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
 
 
                         if (socialTotal.list != null) {
-                            for (int i = 0 ; i < socialTotal.list.size() ; i ++){
-                                socialTotal.list.get(i).photos = Arrays.asList(IMG_URL_LIST).subList(0, i % 9);
-                            }
+//                            for (int i = 0 ; i < socialTotal.list.size() ; i ++){
+//                                socialTotal.list.get(i).photos = Arrays.asList(IMG_URL_LIST).subList(0, i % 9);
+//                            }
                             switch (type){
                                 case REQUEST_TYPE_REFRESH:
                                     mSocialAdapter.setDatas(socialTotal.list);

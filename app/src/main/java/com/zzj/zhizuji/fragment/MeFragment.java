@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -72,4 +73,9 @@ public class MeFragment extends BaseFragment {
         return mContentView;
     }
 
+
+    @OnClick(R.id.shezhi)
+    public void set(View view){
+
+    }
 }

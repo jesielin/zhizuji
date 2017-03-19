@@ -89,7 +89,7 @@ public class RegisterSecondFragment extends BaseFragment {
                     RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
             // MultipartBody.Part  和后端约定好Key，这里的partName是用image
-            avatorPart =
+            avatorPart=
                     MultipartBody.Part.createFormData("headSculpture", file.getName(), requestFile);
 
         }

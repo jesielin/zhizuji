@@ -25,6 +25,7 @@ import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.network.entity.SocialItem;
 import com.zzj.zhizuji.network.entity.SocialTotal;
+import com.zzj.zhizuji.network.entity.Tech;
 import com.zzj.zhizuji.util.DebugLog;
 
 
@@ -139,8 +140,11 @@ public class Network {
         return compose(normalHttpService.getSocialItems(userUUID, page, rows, sign));
     }
 
-    public Observable<Object> postSocial(String owner, String message) {
-        return compose(normalHttpService.sendMoment(owner, message, sign));
+    public Observable<Object> postSocial(RequestBody uuid, RequestBody message,MultipartBody.Part[] part) {
+        RequestBody description =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), sign);
+        return compose(normalHttpService.sendMoment(uuid, message, part,description));
     }
 
     public Observable<Object> sendComment(String momentsID, String ownerUUID, String commenterUUID, String friendUUID, String message) {
@@ -148,6 +152,10 @@ public class Network {
         return compose(normalHttpService.sendComment(momentsID,ownerUUID,commenterUUID,friendUUID,message,sign));
     }
 
+
+    public Observable<List<Tech>> searchTech(int currentPage,int size,String title){
+        return compose(normalHttpService.searchTechs(currentPage,size,title,sign));
+    }
 
 
     public Observable<SetInfoResult> setUserInfo(RequestBody uuid, RequestBody nickName, RequestBody sex, MultipartBody.Part avator){
@@ -172,6 +180,7 @@ public class Network {
                 .observeOn(AndroidSchedulers.mainThread())
                 ;
     }
+
 
 
 

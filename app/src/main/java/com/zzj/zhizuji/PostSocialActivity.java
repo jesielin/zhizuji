@@ -1,11 +1,14 @@
 package com.zzj.zhizuji;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,17 +17,22 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.zzj.zhizuji.base.BaseActivity;
 import com.zzj.zhizuji.network.Network;
 import com.zzj.zhizuji.util.DebugLog;
+import com.zzj.zhizuji.util.SharedPreferenceUtils;
 import com.zzj.zhizuji.util.UIHelper;
 
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +48,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Part;
 import rx.Subscriber;
 
 /**
@@ -98,14 +107,74 @@ public class PostSocialActivity extends AppCompatActivity {
 
     String fileName;
 
+
     @OnClick(R.id.complete)
     public void complete(View view){
         DebugLog.e("complete");
-        Intent intent = new Intent();
-        intent.putExtra("MESSAGE",etMessage.getText().toString());
-        intent.putParcelableArrayListExtra("PHOTOS",photos);
-        setResult(1,intent);
-        finish();
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("正在上传...");
+        progressDialog.show();
+
+
+        MultipartBody.Part[] parts = new MultipartBody.Part[photos.size()];
+        Map<String, RequestBody> map = new ArrayMap<>();
+        for (int i = 0 ; i< photos.size() ; i ++){
+            File file = new File(photos.get(i).getOriginalPath());
+            // 创建 RequestBody，用于封装构建RequestBody
+            RequestBody requestFile =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+            // MultipartBody.Part  和后端约定好Key，这里的partName是用image
+            parts[i] = MultipartBody.Part.createFormData("photos", file.getName(), requestFile);
+//            map.put("photos"+i,)
+
+        }
+
+        //添加UUID
+        String uuidText = SharedPreferenceUtils.getValue("UUID");
+
+        RequestBody uuid =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), uuidText);
+        // 添加message
+        String messageText = etMessage.getText().toString();
+        RequestBody message =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), messageText);
+
+
+
+
+        Network.getInstance().postSocial(uuid,message,parts)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {
+                        progressDialog.cancel();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        DebugLog.e("error:"+e.getMessage());
+                        progressDialog.cancel();
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        if (o != null)
+                            DebugLog.e("o:"+new Gson().toJson(o));
+                        progressDialog.setMessage("上传成功");
+//                        Intent intent = new Intent();
+//
+//                        intent.putExtra("MESSAGE",etMessage.getText().toString());
+//                        intent.putParcelableArrayListExtra("PHOTOS",photos);
+//                        setResult(1,intent);
+                        finish();
+                    }
+                });
+
+
 
     }
 

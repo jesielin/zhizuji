@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    useLibrary 'org.apache.http.legacy'
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -45,4 +46,8 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     compile 'cn.finalteam.rxgalleryfinal:library:0.0.3'
+
+    //Optional compile for GCM (Google Cloud Messaging).
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
+    compile 'com.hyphenate:hyphenate-sdk:3.3.0'
 }

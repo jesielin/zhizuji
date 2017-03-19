@@ -34,6 +34,7 @@ public abstract class BaseFragment extends Fragment {
         mContentView = View.inflate(getActivity(),getLayoutId(),null);
         ButterKnife.bind(this,mContentView);
 //        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
         tvTitle.setText(getTitle());
         return mContentView;
     }

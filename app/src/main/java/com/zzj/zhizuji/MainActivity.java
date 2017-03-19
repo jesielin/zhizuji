@@ -14,6 +14,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.zzj.zhizuji.base.BaseFragment;
 import com.zzj.zhizuji.fragment.HomeFragment;
 import com.zzj.zhizuji.fragment.MeFragment;
@@ -36,6 +39,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+
+        EMClient.getInstance().login(SharedPreferenceUtils.getValue("UUID"),"123456",new EMCallBack() {//回调
+            @Override
+            public void onSuccess() {
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                DebugLog.d( "登录聊天服务器成功！");
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                DebugLog.d( "登录聊天服务器失败！");
+            }
+        });
+
 
         mFragmentManager = getSupportFragmentManager();
 

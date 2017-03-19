@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
@@ -80,6 +81,7 @@ public interface HttpService {
      * @param sign
      * @return
      */
+    @GET("/searchTechs")
     Observable<HttpResult<List<Tech>>> searchTechs(@Query("currentPage") int currentPage, @Query("size") int size, @Query("techName") String techName, @Query("sign") String sign);
 
     /**
@@ -120,13 +122,18 @@ public interface HttpService {
 
     /**
      * 发表朋友圈
-     * @param owner
+     * @param uuid
      * @param message
+     * @param parts
      * @param sign
      * @return
      */
+    @Multipart
     @POST("/sendMoment")
-    Observable<HttpResult<Object>> sendMoment(@Query("owner")String owner,@Query("message")String message,@Query("sign")String sign);
+    Observable<HttpResult<Object>> sendMoment(@Part("owner")RequestBody uuid,
+                                              @Part("message")RequestBody message,
+                                              @Part("photos")MultipartBody.Part[] parts,
+                                              @Part("sign")RequestBody sign);
 
 
     /**
@@ -152,5 +159,7 @@ public interface HttpService {
      */
     @GET("sendSms")
     Observable<HttpResult<Object>> sendSms(@Query("mobile")String mobile,@Query("sign")String sign);
+
+
 
 }
