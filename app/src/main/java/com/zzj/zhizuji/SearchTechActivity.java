@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.zzj.zhizuji.network.Network;
@@ -20,6 +21,7 @@ import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.KeyboardControlMnanager;
 import com.zzj.zhizuji.util.UIHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,9 +42,9 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_tech);
         ButterKnife.bind(this);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        refreshLayout.setOnRefreshListener(this);
-//        refreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setColorSchemeResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
 //        refreshLayout.post(new Runnable() {
 //            @Override
 //            public void run() {
@@ -51,6 +53,8 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
 //                DebugLog.e("start refre");
 //            }
 //        });
+        recyclerView.setAdapter(myAdapter);
+
         etSearch.setOnKeyListener(new View.OnKeyListener() {
 
             @Override
@@ -61,7 +65,9 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
                     // 先隐藏键盘
                     UIHelper.hideInputMethod(etSearch);
                     //进行搜索操作的方法，在该方法中可以加入mEditSearchUser的非空判断
-                    search();
+                    refreshLayout.setRefreshing(true);
+                    onRefresh();
+
                 }
                 return false;
             }
@@ -75,17 +81,24 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
                     @Override
                     public void onCompleted() {
                         DebugLog.e("complete");
+                        refreshLayout.setRefreshing(false);
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         DebugLog.e("error:"+e.getMessage());
 
+                        refreshLayout.setRefreshing(false);
                     }
 
                     @Override
-                    public void onNext(List<Tech> teches) {
+                    public void onNext(List<Tech> ts) {
                         DebugLog.e("json:"+new Gson().toJson(teches));
+                        teches.clear();
+                        teches.addAll(ts);
+                        myAdapter.notifyDataSetChanged();
+                        refreshLayout.setRefreshing(false);
 
                     }
                 });
@@ -97,34 +110,40 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
     @BindView(R.id.list)
     RecyclerView recyclerView;
 
+    private List<Tech> teches = new ArrayList<>();
 
     @Override
     public void onRefresh(){
-
+        search();
     }
 
     public class SearchVH extends RecyclerView.ViewHolder{
 
+        @BindView(R.id.name)
+        TextView tvName;
         public SearchVH(View itemView) {
             super(itemView);
+            ButterKnife.bind(this,itemView);
         }
     }
+
+    private MyAdapter myAdapter = new MyAdapter();
 
     public class MyAdapter extends RecyclerView.Adapter<SearchVH>{
 
         @Override
         public SearchVH onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            return new SearchVH(View.inflate(parent.getContext(),R.layout.item_search,null));
         }
 
         @Override
         public void onBindViewHolder(SearchVH holder, int position) {
-
+            holder.tvName.setText(teches.get(position).nickName);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return teches.size();
         }
     }
 }

@@ -14,6 +14,7 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 import com.zzj.zhizuji.network.entity.IndexAdvert;
+import com.zzj.zhizuji.network.entity.LoginResult;
 import com.zzj.zhizuji.network.entity.Notice;
 import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.network.entity.SetInfoResult;
@@ -44,7 +45,7 @@ public interface HttpService {
      * @return
      */
     @GET("/login")
-    Observable<HttpResult<Object>> login(@Query("loginName") String loginName, @Query("identifyingCode") String identifyingCode, @Query("sign") String sign);
+    Observable<HttpResult<LoginResult>> login(@Query("loginName") String loginName, @Query("identifyingCode") String identifyingCode, @Query("sign") String sign);
 
     /**
      * 注册

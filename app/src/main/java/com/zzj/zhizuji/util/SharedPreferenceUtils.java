@@ -31,6 +31,19 @@ public class SharedPreferenceUtils {
         instance.edit().putString("UUID",uuid).putString("LOGIN_NAME",loginName).apply();
     }
 
+    public static void setLoginLogin(String uuid,String loginName,String nickName,String avator){
+        instance.edit()
+                .putString("UUID",uuid)
+                .putString("LOGIN_NAME",loginName)
+                .putString("NICKNAME",nickName)
+                .putString("AVATOR",avator)
+                .apply();
+    }
+
+    public static void quitLogin(){
+        instance.edit().putString("UUID","").putString("LOGIN_NAME","").putString("AVATOR","").putString("NICKNAME","").apply();
+    }
+
     public static String getValue(String key){
         return instance.getString(key,"");
     }

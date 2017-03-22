@@ -38,24 +38,24 @@ public class MyApp extends Application {
         EMClient.getInstance().setDebugMode(true);
 
 
-        EMClient.getInstance().login(SharedPreferenceUtils.getValue("UUID"),"123456",new EMCallBack() {//回调
-            @Override
-            public void onSuccess() {
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                DebugLog.d( "登录聊天服务器成功！");
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                DebugLog.d( "登录聊天服务器失败！");
-            }
-        });
+//        EMClient.getInstance().login(SharedPreferenceUtils.getValue("UUID"),"123456",new EMCallBack() {//回调
+//            @Override
+//            public void onSuccess() {
+//                EMClient.getInstance().groupManager().loadAllGroups();
+//                EMClient.getInstance().chatManager().loadAllConversations();
+//                DebugLog.d( "登录聊天服务器成功！");
+//            }
+//
+//            @Override
+//            public void onProgress(int progress, String status) {
+//
+//            }
+//
+//            @Override
+//            public void onError(int code, String message) {
+//                DebugLog.d( "登录聊天服务器失败！");
+//            }
+//        });
     }
 
     public static Context getContext() {

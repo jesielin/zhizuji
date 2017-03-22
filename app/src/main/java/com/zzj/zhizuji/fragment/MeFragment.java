@@ -1,5 +1,6 @@
 package com.zzj.zhizuji.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
@@ -24,6 +25,7 @@ import butterknife.OnClick;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zzj.zhizuji.R;
+import com.zzj.zhizuji.SettingActivity;
 import com.zzj.zhizuji.base.BaseFragment;
 import com.zzj.zhizuji.util.GlideCircleTransform;
 import com.zzj.zhizuji.util.SharedPreferenceUtils;
@@ -76,6 +78,6 @@ public class MeFragment extends BaseFragment {
 
     @OnClick(R.id.shezhi)
     public void set(View view){
-
+        startActivity(new Intent(getActivity(), SettingActivity.class));
     }
 }

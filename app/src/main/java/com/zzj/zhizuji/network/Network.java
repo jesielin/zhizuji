@@ -21,6 +21,7 @@ import rx.schedulers.Schedulers;
 
 import com.google.gson.Gson;
 import com.zzj.zhizuji.exception.NetworkException;
+import com.zzj.zhizuji.network.entity.LoginResult;
 import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.network.entity.SocialItem;
@@ -134,6 +135,10 @@ public class Network {
 
     public Observable<RegisterResult> register(String loginName, String verifyCode, String type){
         return compose(normalHttpService.register(loginName,verifyCode,type,sign));
+    }
+
+    public Observable<LoginResult> login(String loginName, String identifyCode){
+        return compose(normalHttpService.login(loginName,identifyCode,sign));
     }
 
     public Observable<SocialTotal> getSocialItems(String userUUID, int page, int rows) {

@@ -1,5 +1,6 @@
 package com.zzj.zhizuji;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zzj.zhizuji.network.Network;
+import com.zzj.zhizuji.network.entity.LoginResult;
 import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.SharedPreferenceUtils;
 import com.zzj.zhizuji.util.UIHelper;
@@ -47,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText etVerify;
     @BindView(R.id.getverify)
     Button getVerify;
+    @BindView(R.id.login)
+    Button btnLogin;
     @OnClick(R.id.login)
     public void login(View view){
         if(etTel.getText().toString().length() != 11){
@@ -57,6 +61,32 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
             return;
         }
+        final ProgressDialog progressDialog = UIHelper.showProgressDialog(this, "正在登录...");
+        btnLogin.setEnabled(false);
+        Network.getInstance().login(etTel.getText().toString(),etVerify.getText().toString())
+                .subscribe(new Subscriber<LoginResult>() {
+                    @Override
+                    public void onCompleted() {
+                        btnLogin.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        DebugLog.e("error:"+e.getMessage());
+                        progressDialog.cancel();
+                        btnLogin.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onNext(LoginResult loginResult) {
+                        if (loginResult != null) {
+                            SharedPreferenceUtils.setLoginLogin(loginResult.uuid,loginResult.loginName,loginResult.nickName,loginResult.headSculpture);
+                        }
+                        progressDialog.cancel();
+                        btnLogin.setEnabled(true);
+                        finish();
+                    }
+                });
     }
 
     @OnClick(R.id.getverify)

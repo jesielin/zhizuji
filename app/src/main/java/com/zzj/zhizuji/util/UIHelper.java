@@ -1,6 +1,7 @@
 package com.zzj.zhizuji.util;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -200,6 +201,13 @@ public class UIHelper {
         } catch (Exception e) {
             return Color.TRANSPARENT;
         }
+    }
+
+    public static ProgressDialog showProgressDialog(Context context,String message){
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(message);
+        progressDialog.show();
+        return progressDialog;
     }
 
 

@@ -22,6 +22,7 @@ import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.GlideCircleTransform;
 import com.zzj.zhizuji.util.SharedPreferenceUtils;
+import com.zzj.zhizuji.util.UIHelper;
 
 import java.io.File;
 
@@ -76,9 +77,7 @@ public class RegisterSecondFragment extends BaseFragment {
     @OnClick(R.id.complete)
     public void complete(View view){
 
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("正在注册...");
-        progressDialog.show();
+        final ProgressDialog progressDialog = UIHelper.showProgressDialog(getActivity(),"正在注册...");
 
         Network network = Network.getInstance();
         MultipartBody.Part avatorPart = null;
