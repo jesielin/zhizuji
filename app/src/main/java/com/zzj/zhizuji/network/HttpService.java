@@ -15,6 +15,7 @@ import retrofit2.http.QueryMap;
 import rx.Observable;
 import com.zzj.zhizuji.network.entity.IndexAdvert;
 import com.zzj.zhizuji.network.entity.LoginResult;
+import com.zzj.zhizuji.network.entity.MessageResult;
 import com.zzj.zhizuji.network.entity.Notice;
 import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.network.entity.SetInfoResult;
@@ -160,6 +161,16 @@ public interface HttpService {
      */
     @GET("sendSms")
     Observable<HttpResult<Object>> sendSms(@Query("mobile")String mobile,@Query("sign")String sign);
+
+
+    /**
+     * 获取好友列表
+     * @param uuid
+     * @param sign
+     * @return
+     */
+    @GET("/getMyFriendship")
+    Observable<HttpResult<List<MessageResult>>> getMyFriendship(@Query("ownerUUID") String uuid, @Query("sign")String sign);
 
 
 

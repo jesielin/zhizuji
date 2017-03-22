@@ -42,6 +42,7 @@
         <activity android:name=".LoginActivity"/>
         <activity android:name=".SettingActivity"/>
         <activity android:name=".SearchTechActivity"/>
+        <activity android:name=".TalkActivity"/>
         <activity android:name=".RegisterActivity"
             android:windowSoftInputMode="stateUnspecified"/>
 

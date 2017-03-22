@@ -26,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Subscriber;
 
 /**
@@ -115,6 +116,11 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
     @Override
     public void onRefresh(){
         search();
+    }
+
+    @OnClick(R.id.cancel)
+    public void cancel(View view){
+        finish();
     }
 
     public class SearchVH extends RecyclerView.ViewHolder{

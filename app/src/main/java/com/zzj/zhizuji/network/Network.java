@@ -22,6 +22,7 @@ import rx.schedulers.Schedulers;
 import com.google.gson.Gson;
 import com.zzj.zhizuji.exception.NetworkException;
 import com.zzj.zhizuji.network.entity.LoginResult;
+import com.zzj.zhizuji.network.entity.MessageResult;
 import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.network.entity.SocialItem;
@@ -173,6 +174,10 @@ public class Network {
 
     public Observable<Object> sendSms(String mobile){
         return compose(smsHttpService.sendSms(mobile,sign));
+    }
+
+    public Observable<List<MessageResult>> getMyFriendship(String uuid){
+        return compose(normalHttpService.getMyFriendship(uuid,sign));
     }
 
 

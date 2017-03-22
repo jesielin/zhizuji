@@ -53,14 +53,15 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     @OnClick(R.id.login)
     public void login(View view){
-        if(etTel.getText().toString().length() != 11){
-            Toast.makeText(this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (etVerify.getText().toString().length() != 6){
-            Toast.makeText(this, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        //TODO:
+//        if(etTel.getText().toString().length() != 11){
+//            Toast.makeText(this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (etVerify.getText().toString().length() != 6){
+//            Toast.makeText(this, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         final ProgressDialog progressDialog = UIHelper.showProgressDialog(this, "正在登录...");
         btnLogin.setEnabled(false);
         Network.getInstance().login(etTel.getText().toString(),etVerify.getText().toString())
@@ -91,10 +92,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.getverify)
     public void getverify(View view){
-        if(etTel.getText().toString().length() != 11){
-            Toast.makeText(this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        //TODO:
+//        if(etTel.getText().toString().length() != 11){
+//            Toast.makeText(this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         Message message = handler.obtainMessage(PERIOD,60);
         handler.sendMessageDelayed(message,1000);
