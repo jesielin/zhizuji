@@ -10,6 +10,7 @@ import android.view.View;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.easeui.controller.EaseUI;
 import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.SharedPreferenceUtils;
 
@@ -29,33 +30,17 @@ public class MyApp extends Application {
         context = this;
         SharedPreferenceUtils.init(this);
 
-        EMOptions options = new EMOptions();
-        // 默认添加好友时，是不需要验证的，改成需要验证
-        options.setAcceptInvitationAlways(false);
-        //初始化
-        EMClient.getInstance().init(this, options);
-        //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
+        EaseUI.getInstance().init(this,null);
         EMClient.getInstance().setDebugMode(true);
+//        EMOptions options = new EMOptions();
+        // 默认添加好友时，是不需要验证的，改成需要验证
+//        options.setAcceptInvitationAlways(false);
+        //初始化
+//        EMClient.getInstance().init(this, null);
+        //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
+//        EMClient.getInstance().setDebugMode(true);
 
 
-//        EMClient.getInstance().login(SharedPreferenceUtils.getValue("UUID"),"123456",new EMCallBack() {//回调
-//            @Override
-//            public void onSuccess() {
-//                EMClient.getInstance().groupManager().loadAllGroups();
-//                EMClient.getInstance().chatManager().loadAllConversations();
-//                DebugLog.d( "登录聊天服务器成功！");
-//            }
-//
-//            @Override
-//            public void onProgress(int progress, String status) {
-//
-//            }
-//
-//            @Override
-//            public void onError(int code, String message) {
-//                DebugLog.d( "登录聊天服务器失败！");
-//            }
-//        });
     }
 
     public static Context getContext() {

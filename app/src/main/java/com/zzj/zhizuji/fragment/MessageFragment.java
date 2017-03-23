@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -126,6 +127,11 @@ public class MessageFragment extends BaseFragment implements SwipeRefreshLayout.
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if (!SharedPreferenceUtils.isEmLogin()){
+                        Toast.makeText(getActivity(), "账户错误！", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Intent intent  = new Intent(getActivity(), TalkActivity.class);
                     intent.putExtra("UUID",results.get(position).uuid);
                     startActivity(intent);

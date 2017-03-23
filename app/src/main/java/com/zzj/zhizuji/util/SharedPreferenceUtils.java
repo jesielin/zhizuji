@@ -52,5 +52,13 @@ public class SharedPreferenceUtils {
         instance.edit().putString(key,value).apply();
     }
 
+    public static boolean isEmLogin(){
+
+        return instance.getBoolean("EM_LOGIN",false);
+    }
+    public static void setEmLogin(boolean isLogin){
+        instance.edit().putBoolean("EM_LOGIN",isLogin).apply();
+    }
+
 
 }
