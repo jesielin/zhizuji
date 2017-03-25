@@ -24,6 +24,7 @@ import butterknife.OnClick;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.zzj.zhizuji.LoginActivity;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.SettingActivity;
 import com.zzj.zhizuji.base.BaseFragment;
@@ -52,10 +53,6 @@ public class MeFragment extends BaseFragment {
         return "我";
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @BindView(R.id.imv)
     ImageView imv;
@@ -76,8 +73,19 @@ public class MeFragment extends BaseFragment {
     }
 
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (!SharedPreferenceUtils.isLogin()){
+//            startActivity(new Intent(getActivity(),LoginActivity.class));
+//        }
+//    }
+
     @OnClick(R.id.shezhi)
     public void set(View view){
-        startActivity(new Intent(getActivity(), SettingActivity.class));
+        startActivityForResult(new Intent(getActivity(), SettingActivity.class),2);
     }
+
+
+
 }

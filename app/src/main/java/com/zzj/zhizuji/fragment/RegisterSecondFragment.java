@@ -36,6 +36,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultSubscriber;
 import cn.finalteam.rxgalleryfinal.rxbus.event.BaseResultEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageMultipleResultEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -77,7 +78,7 @@ public class RegisterSecondFragment extends BaseFragment {
     @OnClick(R.id.complete)
     public void complete(View view){
 
-        final ProgressDialog progressDialog = UIHelper.showProgressDialog(getActivity(),"正在注册...");
+        final SweetAlertDialog dialog = UIHelper.showProgressDialog(getActivity(), "正在注册...");
 
         Network network = Network.getInstance();
         MultipartBody.Part avatorPart = null;
@@ -111,40 +112,27 @@ public class RegisterSecondFragment extends BaseFragment {
                 .subscribe(new Subscriber<SetInfoResult>() {
                     @Override
                     public void onCompleted() {
-                        progressDialog.cancel();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         DebugLog.e("message:" + e.getMessage());
-                        progressDialog.cancel();
+                        UIHelper.showDialogFailed(dialog,"注册失败！");
                     }
 
                     @Override
                     public void onNext(SetInfoResult setInfoResult) {
                         SharedPreferenceUtils.setStringValue("AVATOR",setInfoResult.headSculpture);
                         SharedPreferenceUtils.setStringValue("NICKNAME",setInfoResult.nickName);
-                        progressDialog.setMessage("注册成功");
-                        getActivity().finish();
+                        UIHelper.showDialogSuccess(dialog, "注册成功！", new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                dialog.dismiss();
+                                getActivity().finish();
+                            }
+                        });
                     }
                 });
-//                .subscribe(new Subscriber<Object>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        progressDialog.cancel();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        DebugLog.e("message:" + e.getMessage());
-//                        progressDialog.cancel();
-//                    }
-//
-//                    @Override
-//                    public void onNext(Object o) {
-//
-//                    }
-//                });
 
 
     }

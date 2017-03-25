@@ -24,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.http.Part;
 import rx.Subscriber;
 
@@ -41,8 +42,10 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         UIHelper.setTitle("登录",this);
 
-
     }
+
+
+
     @BindView(R.id.name)
     TextInputEditText etTel;
     @BindView(R.id.verify)
@@ -62,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 //            Toast.makeText(this, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
 //            return;
 //        }
-        final ProgressDialog progressDialog = UIHelper.showProgressDialog(this, "正在登录...");
+        final SweetAlertDialog dialog = UIHelper.showProgressDialog(this, "正在登录...");
         btnLogin.setEnabled(false);
         Network.getInstance().login(etTel.getText().toString(),etVerify.getText().toString())
                 .subscribe(new Subscriber<LoginResult>() {
@@ -74,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         DebugLog.e("error:"+e.getMessage());
-                        progressDialog.cancel();
+                        UIHelper.showDialogFailed(dialog,"登录失败！");
                         btnLogin.setEnabled(true);
                     }
 
@@ -83,9 +86,14 @@ public class LoginActivity extends AppCompatActivity {
                         if (loginResult != null) {
                             SharedPreferenceUtils.setLoginLogin(loginResult.uuid,loginResult.loginName,loginResult.nickName,loginResult.headSculpture);
                         }
-                        progressDialog.cancel();
-                        btnLogin.setEnabled(true);
-                        finish();
+                        UIHelper.showDialogSuccess(dialog, "登录成功！", new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+
                     }
                 });
     }

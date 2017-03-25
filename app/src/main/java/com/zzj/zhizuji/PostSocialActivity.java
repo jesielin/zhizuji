@@ -45,6 +45,7 @@ import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultSubscriber;
 import cn.finalteam.rxgalleryfinal.rxbus.event.BaseResultEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageMultipleResultEvent;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -113,9 +114,8 @@ public class PostSocialActivity extends AppCompatActivity {
         DebugLog.e("complete");
 
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("正在上传...");
-        progressDialog.show();
+
+        final SweetAlertDialog dialog = UIHelper.showProgressDialog(this, "正在上传...");
 
 
         MultipartBody.Part[] parts = new MultipartBody.Part[photos.size()];
@@ -151,26 +151,26 @@ public class PostSocialActivity extends AppCompatActivity {
                 .subscribe(new Subscriber<Object>() {
                     @Override
                     public void onCompleted() {
-                        progressDialog.cancel();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         DebugLog.e("error:"+e.getMessage());
-                        progressDialog.cancel();
+                        UIHelper.showDialogFailed(dialog,"上传失败!");
                     }
 
                     @Override
                     public void onNext(Object o) {
                         if (o != null)
                             DebugLog.e("o:"+new Gson().toJson(o));
-                        progressDialog.setMessage("上传成功");
-//                        Intent intent = new Intent();
-//
-//                        intent.putExtra("MESSAGE",etMessage.getText().toString());
-//                        intent.putParcelableArrayListExtra("PHOTOS",photos);
-//                        setResult(1,intent);
-                        finish();
+                        UIHelper.showDialogSuccess(dialog, "上传成功!", new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
                     }
                 });
 

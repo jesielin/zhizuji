@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,9 @@ import butterknife.ButterKnife;
 import rx.Subscriber;
 
 import com.google.gson.Gson;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.zzj.zhizuji.LoginActivity;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.SearchTechActivity;
 import com.zzj.zhizuji.TalkActivity;
@@ -70,8 +74,13 @@ public class MessageFragment extends BaseFragment implements SwipeRefreshLayout.
         });
         recyclerView.setAdapter(myAdapter);
 
+        loginEm();
+
+
         return mContentView;
     }
+
+
 
     @Override
     public void onRefresh() {
@@ -100,6 +109,29 @@ public class MessageFragment extends BaseFragment implements SwipeRefreshLayout.
                 });
     }
 
+    private void loginEm(){
+        EMClient.getInstance().login(SharedPreferenceUtils.getValue("UUID"), "123456", new EMCallBack() {//回调
+            @Override
+            public void onSuccess() {
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                DebugLog.d("登录聊天服务器成功！");
+                SharedPreferenceUtils.setEmLogin(true);
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                DebugLog.d("登录聊天服务器失败！");
+                SharedPreferenceUtils.setEmLogin(false);
+            }
+        });
+    }
+
     public class MessageVH extends RecyclerView.ViewHolder{
 
         @BindView(R.id.name)
@@ -118,7 +150,7 @@ public class MessageFragment extends BaseFragment implements SwipeRefreshLayout.
 
         @Override
         public MessageVH onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MessageVH(View.inflate(parent.getContext(),R.layout.item_search,null));
+            return new MessageVH(View.inflate(parent.getContext(),R.layout.item_message,null));
         }
 
         @Override
@@ -130,6 +162,7 @@ public class MessageFragment extends BaseFragment implements SwipeRefreshLayout.
 
                     if (!SharedPreferenceUtils.isEmLogin()){
                         Toast.makeText(getActivity(), "账户错误！", Toast.LENGTH_SHORT).show();
+                        loginEm();
                         return;
                     }
                     Intent intent  = new Intent(getActivity(), TalkActivity.class);

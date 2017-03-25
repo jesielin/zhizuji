@@ -44,6 +44,7 @@ import cn.finalteam.rxgalleryfinal.bean.MediaBean;
 import rx.Subscriber;
 
 import com.zzj.zhizuji.LoginActivity;
+import com.zzj.zhizuji.MainActivity;
 import com.zzj.zhizuji.PostSocialActivity;
 import com.zzj.zhizuji.R;
 import com.zzj.zhizuji.adapter.SocialAdapter;
@@ -83,11 +84,21 @@ public class SocialFragment extends BaseFragment implements SwipeRefreshLayout.O
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
 
+
+
             mNetwork = Network.getInstance();
             initView();
             return mContentView;
 
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (!SharedPreferenceUtils.isLogin()){
+//            startActivity(new Intent(getActivity(),LoginActivity.class));
+//        }
+//    }
 
     @Override
     protected int getLayoutId() {

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.zzj.zhizuji.network.Network;
 import com.zzj.zhizuji.network.entity.Tech;
 import com.zzj.zhizuji.util.DebugLog;
 import com.zzj.zhizuji.util.KeyboardControlMnanager;
+import com.zzj.zhizuji.util.SharedPreferenceUtils;
 import com.zzj.zhizuji.util.UIHelper;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Subscriber;
 
 /**
@@ -127,6 +130,8 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
 
         @BindView(R.id.name)
         TextView tvName;
+        @BindView(R.id.add)
+        Button btnAdd;
         public SearchVH(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
@@ -143,8 +148,39 @@ public class SearchTechActivity extends AppCompatActivity implements SwipeRefres
         }
 
         @Override
-        public void onBindViewHolder(SearchVH holder, int position) {
+        public void onBindViewHolder(final SearchVH holder, final int position) {
             holder.tvName.setText(teches.get(position).nickName);
+            holder.btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.btnAdd.setEnabled(false);
+                    final SweetAlertDialog dialog = UIHelper.showProgressDialog(SearchTechActivity.this, "");
+                    Network.getInstance().addFriend(SharedPreferenceUtils.getValue("UUID"),teches.get(position).uuid)
+                            .subscribe(new Subscriber<Object>() {
+                                @Override
+                                public void onCompleted() {
+
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    UIHelper.showDialogFailed(dialog,"关注失败！");
+                                    holder.btnAdd.setEnabled(true);
+                                }
+
+                                @Override
+                                public void onNext(Object o) {
+                                    UIHelper.showDialogSuccess(dialog, "关注成功！", new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            dialog.dismiss();
+                                            holder.btnAdd.setText("已关注");
+                                        }
+                                    });
+                                }
+                            });
+                }
+            });
         }
 
         @Override

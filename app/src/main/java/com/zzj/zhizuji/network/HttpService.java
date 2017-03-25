@@ -173,5 +173,10 @@ public interface HttpService {
     Observable<HttpResult<List<MessageResult>>> getMyFriendship(@Query("ownerUUID") String uuid, @Query("sign")String sign);
 
 
+    ///addFriend?ownerUUID=FFF1-33&friendUUID=EEE1&sign=123
+    @GET("addFriend")
+    Observable<HttpResult<Object>> addFriend(@Query("ownerUUID")String ownerUUID,@Query("friendUUID")String friendUUID,@Query("sign")String sign);
+
+
 
 }

@@ -134,6 +134,10 @@ public class Network {
 //    }
 //
 
+    public Observable<Object> addFriend(String ownerUUID,String friendUUID){
+        return compose(normalHttpService.addFriend(ownerUUID,friendUUID,sign));
+    }
+
     public Observable<RegisterResult> register(String loginName, String verifyCode, String type){
         return compose(normalHttpService.register(loginName,verifyCode,type,sign));
     }

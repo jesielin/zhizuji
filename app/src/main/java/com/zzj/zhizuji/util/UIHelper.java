@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.zzj.zhizuji.MyApp;
 import com.zzj.zhizuji.R;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 
 /**
  * Created by 大灯泡 on 2016/10/26.
@@ -203,11 +205,26 @@ public class UIHelper {
         }
     }
 
-    public static ProgressDialog showProgressDialog(Context context,String message){
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage(message);
-        progressDialog.show();
-        return progressDialog;
+
+
+    public static SweetAlertDialog showProgressDialog(Context context,String loadingText){
+        SweetAlertDialog dialog = new SweetAlertDialog(context,SweetAlertDialog.PROGRESS_TYPE).setTitleText(loadingText);
+        dialog.setCancelable(false);
+        dialog.show();
+        return dialog;
+    }
+
+    public static void showDialogSuccess(SweetAlertDialog dialog, String successText, SweetAlertDialog.OnSweetClickListener listener){
+        dialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        dialog.setTitleText(successText);
+        dialog.setConfirmClickListener(listener);
+
+    }
+
+    public static void showDialogFailed(SweetAlertDialog dialog,String failText){
+        dialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        dialog.setTitleText(failText);
+
     }
 
 

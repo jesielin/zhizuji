@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.zzj.zhizuji.util.SharedPreferenceUtils;
+import com.zzj.zhizuji.util.UIHelper;
 
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
@@ -24,6 +25,7 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
+        UIHelper.setTitle("设置",this);
     }
 
     @OnClick(R.id.quit)
