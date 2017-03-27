@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.zzj.zhizuji.exception.NetworkException;
 import com.zzj.zhizuji.network.entity.LoginResult;
 import com.zzj.zhizuji.network.entity.MessageResult;
+import com.zzj.zhizuji.network.entity.NewsResult;
 import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.network.entity.SetInfoResult;
 import com.zzj.zhizuji.network.entity.SocialItem;
@@ -125,14 +126,10 @@ public class Network {
 
     private static String sign = "123";
 
-//    public Observable<HttpResult<List<IndexAdvert>>> getIndexAdvert(int position){
-//        return compose(httpService.getIndexAdvert(position, sign));
-//    }
-//
-//    public Observable<HttpResult<Object>> login(String loginName, String identifyingCode){
-//        return compose(httpService.login(loginName,identifyingCode,sign));
-//    }
-//
+
+    public Observable<List<NewsResult>> getNews(String type){
+        return compose(normalHttpService.getNews(type,sign));
+    }
 
     public Observable<Object> addFriend(String ownerUUID,String friendUUID){
         return compose(normalHttpService.addFriend(ownerUUID,friendUUID,sign));

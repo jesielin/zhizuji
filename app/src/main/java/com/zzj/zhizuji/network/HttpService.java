@@ -16,6 +16,7 @@ import rx.Observable;
 import com.zzj.zhizuji.network.entity.IndexAdvert;
 import com.zzj.zhizuji.network.entity.LoginResult;
 import com.zzj.zhizuji.network.entity.MessageResult;
+import com.zzj.zhizuji.network.entity.NewsResult;
 import com.zzj.zhizuji.network.entity.Notice;
 import com.zzj.zhizuji.network.entity.RegisterResult;
 import com.zzj.zhizuji.network.entity.SetInfoResult;
@@ -173,9 +174,28 @@ public interface HttpService {
     Observable<HttpResult<List<MessageResult>>> getMyFriendship(@Query("ownerUUID") String uuid, @Query("sign")String sign);
 
 
-    ///addFriend?ownerUUID=FFF1-33&friendUUID=EEE1&sign=123
+    /**
+     * 关注技师
+     * @param ownerUUID
+     * @param friendUUID
+     * @param sign
+     * @return
+     */
     @GET("addFriend")
     Observable<HttpResult<Object>> addFriend(@Query("ownerUUID")String ownerUUID,@Query("friendUUID")String friendUUID,@Query("sign")String sign);
+
+
+
+    /**
+     * 查询咨询列表
+     * @param type 1.文字咨询 2.视频咨询
+     * @param sign
+     * @return
+     */
+    @GET("getInformations")
+    Observable<HttpResult<List<NewsResult>>> getNews(@Query("type")String type,@Query("sign") String sign);
+
+
 
 
 
