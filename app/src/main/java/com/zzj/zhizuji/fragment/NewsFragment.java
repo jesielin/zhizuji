@@ -56,6 +56,7 @@ public class NewsFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
 
+        
         viewPager.setAdapter(new NewsPagerAdapter(getActivity().getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
         return mContentView;

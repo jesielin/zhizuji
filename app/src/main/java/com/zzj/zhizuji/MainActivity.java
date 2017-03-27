@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RadioGroup;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -33,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager mFragmentManager;
     private BaseFragment mCurrentFragment;
-    @BindView(R.id.bottom_nav)
-    BottomNavigationView mBottomNavigationView;
+//    @BindView(R.id.bottom_nav)
+//    BottomNavigationView mBottomNavigationView;
+    @BindView(R.id.group)
+    RadioGroup group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,23 +68,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         trans.show(mCurrentFragment).commitAllowingStateLoss();
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             Class<?> clazz = null;
-
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
 
-                if (item.getItemId() == R.id.social || item.getItemId() == R.id.message || item.getItemId() == R.id.me) {
-
-                    if (!SharedPreferenceUtils.isLogin()) {
-                        preClickId = item.getItemId();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        return false;
-                    }
-                }
-
-                switch (item.getItemId()) {
+                switch (checkedId) {
                     case R.id.home:
                         clazz = HomeFragment.class;
                         break;
@@ -102,44 +96,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                switchFragment(clazz,item.getItemId());
-                return true;
+                switchFragment(clazz,checkedId);
             }
         });
     }
 
-    private boolean isCheckLogining = false;
-    private int preClickId = 0;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-        if (!SharedPreferenceUtils.isLogin()) {
-            switchFragment(HomeFragment.class,R.id.home);
-            return ;
-        }
-
-        Class<?> clazz = null;
-        if (preClickId != 0) {
-            switch (preClickId) {
-                case R.id.social:
-                    clazz = SocialFragment.class;
-                    break;
-                case R.id.message:
-                    clazz = MessageFragment.class;
-                    break;
-                case R.id.me:
-                    clazz = MeFragment.class;
-                    break;
-            }
-            switchFragment(clazz,preClickId);
-            preClickId = 0;
-        }
-
-
-    }
 
     private void switchFragment(Class<?> clazz,int id) {
         if (clazz == null) return;
@@ -153,14 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mCurrentFragment = to;
-        DebugLog.e("class name:"+mCurrentFragment.getClass().getSimpleName());
 
-        Menu menu = mBottomNavigationView.getMenu();
-
-        for (int i = 0, size = menu.size(); i < size; i++) {
-            MenuItem item = menu.getItem(i);
-            item.setChecked(item.getItemId() == id);
-        }
     }
 
 

@@ -12,14 +12,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></FrameLayout>
 
-    <android.support.design.widget.BottomNavigationView
+    <!--<android.support.design.widget.BottomNavigationView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/md_white_1000"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:id="@+id/bottom_nav"-->
+        <!--app:layout_behavior="@string/bye_burger_bottom_behavior"-->
+        <!--app:itemIconTint="@color/item_bottom_nav_selector"-->
+        <!--app:itemTextColor="@color/item_bottom_nav_selector"-->
+        <!--app:menu="@menu/menu_bottom"></android.support.design.widget.BottomNavigationView>-->
+    <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_white_1000"
+        android:paddingTop="15dp"
+        android:id="@+id/group"
         android:layout_gravity="bottom"
-        android:id="@+id/bottom_nav"
-        app:layout_behavior="@string/bye_burger_bottom_behavior"
-        app:itemIconTint="@color/item_bottom_nav_selector"
-        app:itemTextColor="@color/item_bottom_nav_selector"
-        app:menu="@menu/menu_bottom"></android.support.design.widget.BottomNavigationView>
+        android:background="@color/md_white_1000"
+        android:paddingBottom="15dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/home"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="0sp"
+            android:checked="true"
+            android:drawableTop="@drawable/bottom_main_nav_home_bg"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/social"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:button="@null"
+
+            android:textSize="0sp"
+            android:drawableTop="@drawable/bottom_main_nav_social_bg"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/news"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="0sp"
+            android:drawableTop="@drawable/bottom_main_nav_news_bg"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="0sp"
+            android:drawableTop="@drawable/bottom_main_nav_message_bg"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/me"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:textSize="0sp"
+            android:drawableTop="@drawable/bottom_main_nav_me_bg"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
 </android.support.design.widget.CoordinatorLayout>
